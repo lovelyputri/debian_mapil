@@ -117,6 +117,10 @@
 </head>
 <body class="selection:bg-brand-terracotta selection:text-white">
 
+  <audio id="banyuwangiAudio" loop>
+      <source src="audio/lagu.mp3" type="audio/mpeg">
+  </audio>
+
   <!-- NAVBAR -->
   <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 glass-nav">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -148,7 +152,7 @@
       <div class="hidden sm:flex items-center gap-3">
         <button id="soundscapeBtn" onclick="toggleSoundscape()" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-brand-cream-dark border border-brand-gold/40 text-brand-brown text-xs font-semibold hover:border-brand-terracotta transition-all shadow-sm">
           <i class="fa-solid fa-music text-brand-terracotta" id="soundIcon"></i>
-          <span id="soundText">Suara Gamelan</span>
+          <span id="soundText">Musik Banyuwangi</span>
         </button>
 
         <a href="#jelajah" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-terracotta to-brand-terracotta-dark text-white text-xs font-bold shadow-lg shadow-brand-terracotta/20 hover:shadow-xl hover:scale-105 transition-all">
@@ -236,7 +240,7 @@
           
           <!-- Main Frame Card -->
           <div class="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-4 border-white transform lg:rotate-2 hover:rotate-0 transition-transform duration-500 group">
-            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1000&q=85" alt="Tari Gandrung Osing Banyuwangi" class="w-full h-[420px] object-cover group-hover:scale-105 transition-transform duration-700">
+            <img src="https://tse1.mm.bing.net/th/id/OIP.j_jCFyZ92d3OB_8bNmKb7AHaEy?r=0&pid=Api&P=0&h=180" alt="Tari Gandrung Osing Banyuwangi" class="w-full h-[420px] object-cover group-hover:scale-105 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-brand-dark/30 to-transparent flex flex-col justify-end p-6 text-white">
               <span class="px-3 py-1 bg-brand-gold text-brand-dark font-bold text-[10px] rounded-md tracking-wider uppercase self-start mb-2">Simbol Utama</span>
               <h3 class="font-serif text-2xl font-bold">Gandrung Banyuwangi</h3>
@@ -1073,57 +1077,31 @@
       }
     }
 
-    // 2. SOUNDSCAPE AUDIO GAMELAN SIMULATOR (Web Audio API)
-    let audioCtx = null;
+    // 2. MUSIK BANYUWANGI ASLI
+    const banyuwangiAudio = document.getElementById('banyuwangiAudio');
     let isPlayingSound = false;
-    let soundTimer = null;
 
     function toggleSoundscape() {
       const icon = document.getElementById('soundIcon');
       const text = document.getElementById('soundText');
 
       if (!isPlayingSound) {
-        startGamelanSound();
-        isPlayingSound = true;
-        icon.className = "fa-solid fa-volume-high text-brand-terracotta animate-pulse";
-        text.innerText = "Matikan Suara";
+        banyuwangiAudio.play()
+          .then(() => {
+            isPlayingSound = true;
+            icon.className = "fa-solid fa-volume-high text-brand-terracotta animate-pulse";
+            text.innerText = "Matikan Musik";
+          })
+          .catch((error) => {
+            console.error("Musik gagal diputar:", error);
+            alert("Musik tidak dapat diputar. Pastikan file audio/lagu.mp3 ada dan dapat dibuka.");
+          });
       } else {
-        stopGamelanSound();
+        banyuwangiAudio.pause();
         isPlayingSound = false;
         icon.className = "fa-solid fa-music text-brand-terracotta";
-        text.innerText = "Suara Gamelan";
+        text.innerText = "Musik Banyuwangi";
       }
-    }
-
-    function startGamelanSound() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      
-      const freqs = [523.25, 587.33, 659.25, 783.99, 880.00]; // Slendro-like Pentatonic pitches
-
-      soundTimer = setInterval(() => {
-        if (!isPlayingSound) return;
-        const note = freqs[Math.floor(Math.random() * freqs.length)];
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(note, audioCtx.currentTime);
-
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        osc.start();
-        osc.stop(audioCtx.currentTime + 1.2);
-      }, 500);
-    }
-
-    function stopGamelanSound() {
-      if (soundTimer) clearInterval(soundTimer);
     }
 
     // 3. MODAL SYSTEM DETAILS
