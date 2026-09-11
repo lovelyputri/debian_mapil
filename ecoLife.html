@@ -1,0 +1,3471 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>EcoLife — Small Actions, Big Impact</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <style>
+    /* =========================================================
+       ECO LIFE
+       HTML + CSS + JS — ONE FILE
+    ========================================================= */
+
+    :root {
+      --green-dark: #12372a;
+      --green: #2f7d50;
+      --green-light: #67a86d;
+      --mint: #dff2df;
+      --mint-2: #edf8ed;
+      --cream: #f7f8ef;
+      --cream-dark: #eaf0e2;
+      --yellow: #e5b94b;
+      --yellow-light: #fff3c7;
+      --brown: #354238;
+      --text: #24332a;
+      --muted: #6b776e;
+      --white: #ffffff;
+      --danger: #d95d5d;
+      --shadow: 0 20px 50px rgba(30, 67, 42, .12);
+      --shadow-soft: 0 10px 30px rgba(30, 67, 42, .08);
+      --radius: 28px;
+      --transition: .3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 40px));
+      margin: auto;
+    }
+
+    /* =========================================================
+       NAVBAR
+    ========================================================= */
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 16px 0;
+      transition: .3s ease;
+    }
+
+    .navbar.scrolled {
+      background: rgba(247, 248, 239, .88);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 8px 30px rgba(20, 55, 42, .08);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      flex-shrink: 0;
+    }
+
+    .logo-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--green), var(--green-light));
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      box-shadow: 0 8px 20px rgba(47,125,80,.25);
+      transition: .3s;
+    }
+
+    .logo:hover .logo-icon {
+      transform: rotate(-8deg) scale(1.06);
+    }
+
+    .logo-title {
+      font-family: "Playfair Display", serif;
+      font-weight: 800;
+      color: var(--green-dark);
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .logo-sub {
+      color: var(--green);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 5px;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px;
+      border: 1px solid rgba(47,125,80,.12);
+      background: rgba(255,255,255,.55);
+      border-radius: 50px;
+    }
+
+    .nav-link {
+      padding: 10px 15px;
+      border-radius: 50px;
+      color: #4c5c50;
+      font-size: 12px;
+      font-weight: 700;
+      transition: .25s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: white;
+      color: var(--green);
+      box-shadow: 0 4px 12px rgba(20,55,42,.08);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .icon-button {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.7);
+      color: var(--green-dark);
+      border: 1px solid rgba(47,125,80,.12);
+      transition: .3s;
+    }
+
+    .icon-button:hover {
+      background: var(--green);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 13px 21px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: 800;
+      transition: .3s;
+    }
+
+    .btn-green {
+      background: linear-gradient(135deg, var(--green), #3e9560);
+      color: white;
+      box-shadow: 0 12px 25px rgba(47,125,80,.22);
+    }
+
+    .btn-green:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 17px 30px rgba(47,125,80,.28);
+    }
+
+    .btn-light {
+      background: white;
+      color: var(--green-dark);
+      border: 1px solid rgba(47,125,80,.13);
+    }
+
+    .btn-light:hover {
+      transform: translateY(-3px);
+      background: var(--mint-2);
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 43px;
+      height: 43px;
+      border-radius: 13px;
+      background: white;
+      color: var(--green-dark);
+      border: 1px solid rgba(47,125,80,.12);
+    }
+
+    .mobile-menu {
+      display: none;
+    }
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+
+    .hero {
+      min-height: 100vh;
+      padding: 145px 0 90px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(103,168,109,.18), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(229,185,75,.15), transparent 25%),
+        linear-gradient(135deg, #f7f8ef 0%, #edf6e9 100%);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      border: 1px solid rgba(47,125,80,.09);
+      border-radius: 50%;
+      right: -150px;
+      top: 90px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border: 1px solid rgba(229,185,75,.13);
+      border-radius: 50%;
+      left: -100px;
+      bottom: 50px;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 70px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 50px;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(47,125,80,.15);
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 1.7px;
+      font-size: 10px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(47,125,80,.3); }
+      50% { box-shadow: 0 0 0 8px rgba(47,125,80,0); }
+    }
+
+    .hero h1 {
+      font-family: "Playfair Display", serif;
+      color: var(--green-dark);
+      font-size: clamp(45px, 6vw, 78px);
+      line-height: 1.03;
+      letter-spacing: -2px;
+      margin-bottom: 23px;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(90deg, var(--green), var(--green-light), var(--yellow));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-style: italic;
+    }
+
+    .hero-description {
+      max-width: 620px;
+      color: #607066;
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 38px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(47,125,80,.15);
+      max-width: 600px;
+    }
+
+    .stat-number {
+      font-family: "Playfair Display", serif;
+      font-size: 28px;
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    /* Hero visual */
+
+    .hero-visual {
+      position: relative;
+      min-height: 530px;
+    }
+
+    .eco-dashboard {
+      position: absolute;
+      width: min(430px, 100%);
+      right: 20px;
+      top: 25px;
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 34px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      transform: rotate(2deg);
+      transition: .5s;
+    }
+
+    .eco-dashboard:hover {
+      transform: rotate(0) translateY(-5px);
+    }
+
+    .dashboard-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .dashboard-title {
+      font-family: "Playfair Display", serif;
+      font-weight: 800;
+      color: var(--green-dark);
+    }
+
+    .online {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--green);
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .online i {
+      font-size: 6px;
+    }
+
+    .score-box {
+      background: linear-gradient(135deg, var(--green-dark), var(--green));
+      border-radius: 25px;
+      color: white;
+      padding: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .score-box::after {
+      content: "🌿";
+      position: absolute;
+      font-size: 90px;
+      opacity: .08;
+      right: 10px;
+      bottom: -20px;
+    }
+
+    .score-small {
+      font-size: 10px;
+      opacity: .75;
+      margin-bottom: 5px;
+    }
+
+    .score-value {
+      font-family: "Playfair Display", serif;
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    .score-status {
+      font-size: 10px;
+      margin-top: 7px;
+      color: #cce8cd;
+    }
+
+    .score-circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 7px solid rgba(255,255,255,.18);
+      border-top-color: #b8e0ba;
+      border-right-color: #e7c766;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+    }
+
+    .mini-card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mini-card {
+      padding: 17px;
+      background: white;
+      border-radius: 20px;
+      border: 1px solid rgba(47,125,80,.08);
+    }
+
+    .mini-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 10px;
+      background: var(--mint);
+      color: var(--green);
+    }
+
+    .mini-card strong {
+      display: block;
+      color: var(--green-dark);
+      font-size: 19px;
+    }
+
+    .mini-card span {
+      font-size: 9px;
+      color: var(--muted);
+    }
+
+    .floating-card {
+      position: absolute;
+      background: rgba(255,255,255,.86);
+      backdrop-filter: blur(14px);
+      border: 1px solid white;
+      border-radius: 20px;
+      padding: 14px 17px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      z-index: 5;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .floating-card.one {
+      left: -5px;
+      bottom: 75px;
+    }
+
+    .floating-card.two {
+      right: -10px;
+      top: 0;
+      animation-delay: 1.3s;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-13px); }
+    }
+
+    .floating-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: var(--mint);
+      color: var(--green);
+      font-size: 18px;
+    }
+
+    .floating-card strong {
+      display: block;
+      font-size: 12px;
+      color: var(--green-dark);
+    }
+
+    .floating-card span {
+      display: block;
+      font-size: 9px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* =========================================================
+       GENERAL SECTIONS
+    ========================================================= */
+
+    section {
+      padding: 105px 0;
+    }
+
+    .section-head {
+      max-width: 700px;
+      margin: 0 auto 55px;
+      text-align: center;
+    }
+
+    .section-tag {
+      display: inline-block;
+      color: var(--green);
+      background: rgba(47,125,80,.08);
+      border: 1px solid rgba(47,125,80,.12);
+      padding: 7px 13px;
+      border-radius: 50px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1.7px;
+      font-weight: 800;
+      margin-bottom: 13px;
+    }
+
+    .section-title {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(32px, 5vw, 52px);
+      color: var(--green-dark);
+      line-height: 1.1;
+      margin-bottom: 15px;
+    }
+
+    .section-description {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    /* =========================================================
+       WHY ECOLIFE
+    ========================================================= */
+
+    .why-section {
+      background: white;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 17px;
+    }
+
+    .problem-card {
+      padding: 27px;
+      border-radius: var(--radius);
+      background: var(--cream);
+      border: 1px solid rgba(47,125,80,.08);
+      transition: .35s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .problem-card::after {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--mint);
+      right: -45px;
+      bottom: -45px;
+      transition: .35s;
+    }
+
+    .problem-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-soft);
+      border-color: rgba(47,125,80,.18);
+    }
+
+    .problem-card:hover::after {
+      transform: scale(1.5);
+    }
+
+    .problem-icon {
+      width: 53px;
+      height: 53px;
+      border-radius: 17px;
+      background: var(--mint);
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      font-size: 21px;
+      margin-bottom: 19px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .problem-card h3 {
+      font-family: "Playfair Display", serif;
+      color: var(--green-dark);
+      font-size: 20px;
+      margin-bottom: 9px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .problem-card p {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.7;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* =========================================================
+       SORTING
+    ========================================================= */
+
+    .sorting-section {
+      background: var(--cream);
+    }
+
+    .sorting-wrapper {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 25px;
+      align-items: stretch;
+    }
+
+    .search-panel,
+    .result-panel {
+      border-radius: 32px;
+      background: white;
+      border: 1px solid rgba(47,125,80,.1);
+      box-shadow: var(--shadow-soft);
+      padding: 35px;
+    }
+
+    .search-panel {
+      background: linear-gradient(145deg, var(--green-dark), var(--green));
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .search-panel::after {
+      content: "♻";
+      position: absolute;
+      font-size: 180px;
+      opacity: .05;
+      right: -30px;
+      bottom: -60px;
+    }
+
+    .search-panel h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .search-panel p {
+      font-size: 12px;
+      color: #d1e4d3;
+      line-height: 1.7;
+      margin-bottom: 25px;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 15px 50px 15px 17px;
+      border: none;
+      border-radius: 15px;
+      outline: none;
+      color: var(--text);
+      background: white;
+    }
+
+    .search-box i {
+      position: absolute;
+      right: 17px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--green);
+    }
+
+    .quick-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 15px;
+    }
+
+    .quick-item {
+      padding: 7px 10px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.1);
+      color: #d9ebda;
+      font-size: 9px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .quick-item:hover {
+      background: rgba(255,255,255,.2);
+    }
+
+    .result-panel {
+      min-height: 350px;
+    }
+
+    .result-empty {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--muted);
+      min-height: 280px;
+    }
+
+    .result-empty i {
+      font-size: 50px;
+      color: #b5c9b7;
+      margin-bottom: 13px;
+    }
+
+    .result-content {
+      display: none;
+    }
+
+    .result-content.show {
+      display: block;
+      animation: fadeUp .4s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .result-icon {
+      width: 65px;
+      height: 65px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      font-size: 29px;
+      background: var(--mint);
+    }
+
+    .result-header h3 {
+      font-family: "Playfair Display", serif;
+      color: var(--green-dark);
+      font-size: 25px;
+    }
+
+    .result-category {
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    .result-info {
+      background: var(--cream);
+      padding: 19px;
+      border-radius: 18px;
+      margin-bottom: 12px;
+    }
+
+    .result-info strong {
+      display: block;
+      font-size: 11px;
+      color: var(--green-dark);
+      margin-bottom: 6px;
+    }
+
+    .result-info p {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    /* =========================================================
+       CHALLENGE
+    ========================================================= */
+
+    .challenge-section {
+      background: linear-gradient(180deg, var(--mint-2), #f7faf2);
+    }
+
+    .challenge-top {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .challenge-top .section-head {
+      text-align: left;
+      margin: 0;
+    }
+
+    .points-pill {
+      padding: 13px 17px;
+      border-radius: 15px;
+      background: white;
+      border: 1px solid rgba(47,125,80,.12);
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--green);
+      white-space: nowrap;
+    }
+
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .challenge-card {
+      background: white;
+      border: 1px solid rgba(47,125,80,.09);
+      border-radius: 25px;
+      padding: 24px;
+      transition: .3s;
+      position: relative;
+    }
+
+    .challenge-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .challenge-card.completed {
+      background: #edf8ed;
+      border-color: rgba(47,125,80,.25);
+    }
+
+    .challenge-number {
+      width: 43px;
+      height: 43px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: var(--mint);
+      color: var(--green);
+      margin-bottom: 17px;
+      font-size: 18px;
+    }
+
+    .challenge-card.completed .challenge-number {
+      background: var(--green);
+      color: white;
+    }
+
+    .challenge-card h3 {
+      font-family: "Playfair Display", serif;
+      color: var(--green-dark);
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .challenge-card p {
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.7;
+      min-height: 50px;
+      margin-bottom: 17px;
+    }
+
+    .challenge-button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 12px;
+      background: var(--cream);
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 800;
+      transition: .2s;
+    }
+
+    .challenge-button:hover {
+      background: var(--green);
+      color: white;
+    }
+
+    .challenge-card.completed .challenge-button {
+      background: var(--green);
+      color: white;
+    }
+
+    /* =========================================================
+       TRACKER
+    ========================================================= */
+
+    .tracker-section {
+      background: white;
+    }
+
+    .tracker-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 22px;
+    }
+
+    .tracker-score,
+    .tracker-actions {
+      border-radius: 30px;
+      border: 1px solid rgba(47,125,80,.09);
+      padding: 30px;
+    }
+
+    .tracker-score {
+      background: linear-gradient(145deg, var(--green-dark), var(--green));
+      color: white;
+    }
+
+    .tracker-score h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 25px;
+      margin-bottom: 25px;
+    }
+
+    .big-score {
+      font-family: "Playfair Display", serif;
+      font-size: 70px;
+      line-height: 1;
+    }
+
+    .score-bar {
+      height: 9px;
+      background: rgba(255,255,255,.15);
+      border-radius: 50px;
+      margin: 17px 0 8px;
+      overflow: hidden;
+    }
+
+    .score-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #b7e0b9, #f2d37b);
+      border-radius: inherit;
+      transition: 1s ease;
+    }
+
+    .score-caption {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: #cde1cf;
+    }
+
+    .tracker-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .tracker-stat {
+      padding: 15px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.09);
+    }
+
+    .tracker-stat strong {
+      display: block;
+      font-size: 21px;
+    }
+
+    .tracker-stat span {
+      font-size: 9px;
+      color: #cde1cf;
+    }
+
+    .tracker-actions {
+      background: var(--cream);
+    }
+
+    .tracker-actions h3 {
+      font-family: "Playfair Display", serif;
+      color: var(--green-dark);
+      margin-bottom: 20px;
+    }
+
+    .activity-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .activity-row {
+      background: white;
+      border-radius: 17px;
+      padding: 13px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border: 1px solid rgba(47,125,80,.07);
+    }
+
+    .activity-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .activity-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: var(--mint);
+      color: var(--green);
+      font-size: 13px;
+    }
+
+    .activity-left strong {
+      display: block;
+      color: var(--green-dark);
+      font-size: 11px;
+    }
+
+    .activity-left span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .check-button {
+      width: 31px;
+      height: 31px;
+      border-radius: 10px;
+      background: var(--cream);
+      color: var(--muted);
+    }
+
+    .check-button.checked {
+      background: var(--green);
+      color: white;
+    }
+
+    /* =========================================================
+       TIPS
+    ========================================================= */
+
+    .tips-section {
+      background: var(--cream);
+    }
+
+    .filter-tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 30px;
+    }
+
+    .filter-tab {
+      padding: 9px 15px;
+      border-radius: 50px;
+      background: white;
+      border: 1px solid rgba(47,125,80,.09);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      transition: .25s;
+    }
+
+    .filter-tab.active,
+    .filter-tab:hover {
+      background: var(--green);
+      color: white;
+    }
+
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 17px;
+    }
+
+    .tip-card {
+      padding: 24px;
+      border-radius: 25px;
+      background: white;
+      border: 1px solid rgba(47,125,80,.08);
+      transition: .3s;
+    }
+
+    .tip-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .tip-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 17px;
+    }
+
+    .tip-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 14px;
+      background: var(--mint);
+      display: grid;
+      place-items: center;
+      color: var(--green);
+      font-size: 17px;
+    }
+
+    .tip-category {
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .tip-card h3 {
+      font-family: "Playfair Display", serif;
+      color: var(--green-dark);
+      font-size: 19px;
+      margin-bottom: 8px;
+    }
+
+    .tip-card p {
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* =========================================================
+       ACHIEVEMENTS
+    ========================================================= */
+
+    .achievement-section {
+      background: white;
+    }
+
+    .achievement-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .achievement {
+      text-align: center;
+      padding: 23px 13px;
+      border-radius: 23px;
+      background: var(--cream);
+      border: 1px solid rgba(47,125,80,.08);
+      transition: .3s;
+      opacity: .55;
+      filter: grayscale(.5);
+    }
+
+    .achievement.unlocked {
+      opacity: 1;
+      filter: none;
+      background: var(--mint-2);
+      border-color: rgba(47,125,80,.18);
+    }
+
+    .achievement:hover {
+      transform: translateY(-5px);
+    }
+
+    .badge {
+      width: 70px;
+      height: 70px;
+      margin: auto auto 13px;
+      border-radius: 50%;
+      background: white;
+      display: grid;
+      place-items: center;
+      font-size: 31px;
+      box-shadow: 0 8px 20px rgba(30,67,42,.08);
+    }
+
+    .achievement strong {
+      display: block;
+      font-size: 11px;
+      color: var(--green-dark);
+    }
+
+    .achievement span {
+      display: block;
+      color: var(--muted);
+      font-size: 8px;
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+
+    /* =========================================================
+       CTA
+    ========================================================= */
+
+    .cta-section {
+      padding: 70px 0;
+      background: var(--cream);
+    }
+
+    .cta-box {
+      background:
+        radial-gradient(circle at 90% 20%, rgba(229,185,75,.18), transparent 25%),
+        linear-gradient(135deg, var(--green-dark), var(--green));
+      border-radius: 35px;
+      padding: 55px;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: "🌱";
+      position: absolute;
+      font-size: 170px;
+      opacity: .05;
+      left: -20px;
+      bottom: -50px;
+    }
+
+    .cta-box::after {
+      content: "♻";
+      position: absolute;
+      font-size: 180px;
+      opacity: .05;
+      right: -25px;
+      top: -65px;
+    }
+
+    .cta-box h2 {
+      position: relative;
+      z-index: 2;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(32px, 5vw, 52px);
+      margin-bottom: 13px;
+    }
+
+    .cta-box p {
+      position: relative;
+      z-index: 2;
+      color: #d1e5d3;
+      font-size: 13px;
+      max-width: 600px;
+      margin: auto auto 23px;
+      line-height: 1.7;
+    }
+
+    .cta-box .btn {
+      position: relative;
+      z-index: 2;
+      background: white;
+      color: var(--green-dark);
+    }
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+
+    footer {
+      background: #0d281e;
+      color: white;
+      padding: 65px 0 25px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 45px;
+      padding-bottom: 45px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 17px;
+    }
+
+    .footer-logo .logo-icon {
+      background: var(--yellow);
+      color: var(--green-dark);
+    }
+
+    .footer-logo strong {
+      font-family: "Playfair Display", serif;
+      font-size: 21px;
+    }
+
+    .footer-about {
+      color: #91aa98;
+      font-size: 11px;
+      line-height: 1.8;
+      max-width: 360px;
+    }
+
+    footer h4 {
+      color: #d9c16b;
+      font-family: "Playfair Display", serif;
+      margin-bottom: 15px;
+      font-size: 15px;
+    }
+
+    footer ul {
+      list-style: none;
+      display: grid;
+      gap: 9px;
+    }
+
+    footer li a {
+      color: #91aa98;
+      font-size: 10px;
+      transition: .2s;
+    }
+
+    footer li a:hover {
+      color: white;
+      padding-left: 3px;
+    }
+
+    .footer-bottom {
+      padding-top: 22px;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      color: #617b68;
+      font-size: 9px;
+    }
+
+    /* =========================================================
+       MODAL
+    ========================================================= */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(5,20,13,.65);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: .3s;
+    }
+
+    .modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      width: min(520px, 100%);
+      background: white;
+      border-radius: 30px;
+      padding: 32px;
+      position: relative;
+      transform: translateY(20px) scale(.96);
+      transition: .3s;
+      box-shadow: 0 30px 80px rgba(0,0,0,.2);
+    }
+
+    .modal.show .modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 17px;
+      right: 17px;
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: var(--cream);
+      color: var(--green-dark);
+    }
+
+    .modal-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      background: var(--mint);
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      margin-bottom: 17px;
+    }
+
+    .modal-card h3 {
+      font-family: "Playfair Display", serif;
+      color: var(--green-dark);
+      font-size: 27px;
+      margin-bottom: 10px;
+    }
+
+    .modal-card p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    /* =========================================================
+       TOAST
+    ========================================================= */
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 25px;
+      transform: translate(-50%, 100px);
+      background: var(--green-dark);
+      color: white;
+      padding: 13px 18px;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      z-index: 3000;
+      font-size: 11px;
+      font-weight: 700;
+      opacity: 0;
+      transition: .35s;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    /* =========================================================
+       SCROLL ANIMATION
+    ========================================================= */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: .7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 1050px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-actions .btn {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .mobile-menu {
+        position: absolute;
+        top: 78px;
+        left: 20px;
+        right: 20px;
+        background: rgba(255,255,255,.96);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(47,125,80,.1);
+        border-radius: 22px;
+        padding: 10px;
+        box-shadow: var(--shadow);
+      }
+
+      .mobile-menu.show {
+        display: grid;
+        animation: fadeUp .3s ease;
+      }
+
+      .mobile-link {
+        padding: 13px 15px;
+        border-radius: 13px;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--green-dark);
+      }
+
+      .mobile-link:hover {
+        background: var(--mint);
+        color: var(--green);
+      }
+
+      .hero-grid {
+        gap: 40px;
+      }
+
+      .problem-grid,
+      .challenge-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .achievement-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .hero {
+        padding-top: 120px;
+      }
+
+      .hero-grid,
+      .sorting-wrapper,
+      .tracker-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-content {
+        text-align: center;
+      }
+
+      .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+      }
+
+      .hero-stats {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-visual {
+        min-height: 510px;
+        max-width: 550px;
+        width: 100%;
+        margin: auto;
+      }
+
+      .eco-dashboard {
+        right: 50%;
+        transform: translateX(50%) rotate(1deg);
+      }
+
+      .eco-dashboard:hover {
+        transform: translateX(50%) rotate(0) translateY(-5px);
+      }
+
+      .floating-card.one {
+        left: 0;
+      }
+
+      .floating-card.two {
+        right: 0;
+      }
+
+      .tips-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        width: min(100% - 28px, 1180px);
+      }
+
+      section {
+        padding: 75px 0;
+      }
+
+      .logo-title {
+        font-size: 17px;
+      }
+
+      .logo-sub {
+        font-size: 7px;
+      }
+
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .hero h1 {
+        font-size: 44px;
+      }
+
+      .hero-description {
+        font-size: 13px;
+      }
+
+      .hero-stats {
+        gap: 7px;
+      }
+
+      .stat-number {
+        font-size: 23px;
+      }
+
+      .stat-label {
+        font-size: 8px;
+      }
+
+      .hero-visual {
+        min-height: 440px;
+      }
+
+      .eco-dashboard {
+        padding: 15px;
+        top: 20px;
+        width: calc(100% - 30px);
+      }
+
+      .score-box {
+        padding: 18px;
+      }
+
+      .score-value {
+        font-size: 39px;
+      }
+
+      .score-circle {
+        width: 70px;
+        height: 70px;
+      }
+
+      .floating-card {
+        padding: 10px;
+      }
+
+      .floating-card.two {
+        top: -5px;
+      }
+
+      .floating-card.one {
+        bottom: 20px;
+      }
+
+      .floating-card span {
+        font-size: 8px;
+      }
+
+      .problem-grid,
+      .challenge-grid,
+      .tips-grid,
+      .achievement-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .achievement-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .search-panel,
+      .result-panel,
+      .tracker-score,
+      .tracker-actions {
+        padding: 24px;
+      }
+
+      .challenge-top {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .cta-box {
+        padding: 40px 22px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================================================
+       NAVBAR
+  ========================================================= -->
+
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+
+      <a href="#home" class="logo">
+        <div class="logo-icon">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <div>
+          <div class="logo-title">EcoLife</div>
+          <div class="logo-sub">Small Actions, Big Impact</div>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#home" class="nav-link active">Beranda</a>
+        <a href="#pilah" class="nav-link">Pilah Sampah</a>
+        <a href="#challenge" class="nav-link">Challenge</a>
+        <a href="#tracker" class="nav-link">Tracker</a>
+        <a href="#tips" class="nav-link">Tips</a>
+        <a href="#achievement" class="nav-link">Badge</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-button" onclick="toggleDarkMode()" title="Mode tampilan">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        </button>
+
+        <a href="#challenge" class="btn btn-green">
+          Mulai Sekarang
+        </a>
+
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+          <i class="fa-solid fa-bars" id="menuIcon"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#home" class="mobile-link">🌱 Beranda</a>
+      <a href="#pilah" class="mobile-link">♻️ Pilah Sampah</a>
+      <a href="#challenge" class="mobile-link">🎯 Eco Challenge</a>
+      <a href="#tracker" class="mobile-link">📊 Eco Tracker</a>
+      <a href="#tips" class="mobile-link">💡 Tips</a>
+      <a href="#achievement" class="mobile-link">🏆 Achievement</a>
+    </div>
+  </header>
+
+
+  <!-- =========================================================
+       HERO
+  ========================================================= -->
+
+  <main>
+
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+
+        <div class="hero-content reveal">
+
+          <div class="eyebrow">
+            <span class="pulse-dot"></span>
+            Gerakan Hidup Lebih Hijau
+          </div>
+
+          <h1>
+            Bumi Lebih Baik,
+            <br>
+            Dimulai dari <span>Kebiasaan Kecil.</span>
+          </h1>
+
+          <p class="hero-description">
+            EcoLife membantu kamu membangun kebiasaan ramah lingkungan
+            melalui tantangan sederhana, pencatatan aktivitas, dan panduan
+            memilah sampah dalam kehidupan sehari-hari.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#challenge" class="btn btn-green">
+              <i class="fa-solid fa-seedling"></i>
+              Mulai Tantangan
+            </a>
+
+            <a href="#pilah" class="btn btn-light">
+              <i class="fa-solid fa-recycle"></i>
+              Pilah Sampah
+            </a>
+          </div>
+
+          <div class="hero-stats">
+            <div>
+              <div class="stat-number">12+</div>
+              <div class="stat-label">Kebiasaan Hijau</div>
+            </div>
+
+            <div>
+              <div class="stat-number">5</div>
+              <div class="stat-label">Eco Achievement</div>
+            </div>
+
+            <div>
+              <div class="stat-number">100%</div>
+              <div class="stat-label">Dimulai dari Kamu</div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- HERO DASHBOARD -->
+
+        <div class="hero-visual reveal">
+
+          <div class="floating-card two">
+            <div class="floating-icon">
+              <i class="fa-solid fa-plus"></i>
+            </div>
+            <div>
+              <strong>+10 Eco Points</strong>
+              <span>Challenge selesai!</span>
+            </div>
+          </div>
+
+          <div class="eco-dashboard">
+
+            <div class="dashboard-top">
+              <div>
+                <div class="dashboard-title">Eco Dashboard</div>
+                <small style="font-size:9px;color:#78867c;">Perjalanan hijaumu</small>
+              </div>
+
+              <div class="online">
+                <i class="fa-solid fa-circle"></i>
+                AKTIF
+              </div>
+            </div>
+
+            <div class="score-box">
+
+              <div>
+                <div class="score-small">Eco Score</div>
+                <div class="score-value" id="heroScore">0</div>
+                <div class="score-status">Terus lakukan aksi kecil 🌱</div>
+              </div>
+
+              <div class="score-circle">
+                🌍
+              </div>
+
+            </div>
+
+            <div class="mini-card-grid">
+
+              <div class="mini-card">
+                <div class="mini-icon">
+                  <i class="fa-solid fa-recycle"></i>
+                </div>
+                <strong id="heroWaste">0</strong>
+                <span>Sampah terpilah</span>
+              </div>
+
+              <div class="mini-card">
+                <div class="mini-icon">
+                  <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <strong id="heroChallenge">0</strong>
+                <span>Challenge selesai</span>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="floating-card one">
+            <div class="floating-icon">
+              <i class="fa-solid fa-leaf"></i>
+            </div>
+            <div>
+              <strong>Keep Growing!</strong>
+              <span>Setiap aksi berarti 🌿</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         WHY ECOLIFE
+    ========================================================= -->
+
+    <section class="why-section" id="about">
+      <div class="container">
+
+        <div class="section-head reveal">
+          <span class="section-tag">Kenapa EcoLife?</span>
+          <h2 class="section-title">
+            Perubahan besar dimulai dari hal sederhana.
+          </h2>
+          <p class="section-description">
+            Banyak kebiasaan sehari-hari terlihat kecil. Tetapi jika dilakukan
+            bersama dan konsisten, dampaknya bisa menjadi besar.
+          </p>
+        </div>
+
+        <div class="problem-grid">
+
+          <div class="problem-card reveal">
+            <div class="problem-icon">
+              <i class="fa-solid fa-bottle-water"></i>
+            </div>
+            <h3>Sampah Plastik</h3>
+            <p>
+              Kurangi penggunaan barang sekali pakai dan mulai gunakan
+              alternatif yang bisa digunakan berkali-kali.
+            </p>
+          </div>
+
+          <div class="problem-card reveal">
+            <div class="problem-icon">
+              <i class="fa-solid fa-lightbulb"></i>
+            </div>
+            <h3>Hemat Energi</h3>
+            <p>
+              Biasakan mematikan lampu dan perangkat elektronik ketika
+              sudah tidak digunakan.
+            </p>
+          </div>
+
+          <div class="problem-card reveal">
+            <div class="problem-icon">
+              <i class="fa-solid fa-droplet"></i>
+            </div>
+            <h3>Hemat Air</h3>
+            <p>
+              Gunakan air secukupnya dan jangan biarkan keran terus
+              mengalir tanpa kebutuhan.
+            </p>
+          </div>
+
+          <div class="problem-card reveal">
+            <div class="problem-icon">
+              <i class="fa-solid fa-earth-americas"></i>
+            </div>
+            <h3>Jaga Bumi</h3>
+            <p>
+              Setiap kebiasaan baik membantu membangun lingkungan yang
+              lebih bersih dan nyaman.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         PILAH SAMPAH
+    ========================================================= -->
+
+    <section class="sorting-section" id="pilah">
+      <div class="container">
+
+        <div class="section-head reveal">
+          <span class="section-tag">Smart Waste Guide</span>
+          <h2 class="section-title">Bingung membuangnya ke mana?</h2>
+          <p class="section-description">
+            Cari nama barang dan EcoLife akan membantu menentukan kategori
+            serta cara penanganannya.
+          </p>
+        </div>
+
+        <div class="sorting-wrapper">
+
+          <div class="search-panel reveal">
+
+            <h3>Pilah Sampah ♻️</h3>
+
+            <p>
+              Ketik barang yang ingin kamu buang. Contoh:
+              botol plastik, kulit buah, kardus, atau baterai.
+            </p>
+
+            <div class="search-box">
+              <input
+                type="text"
+                id="wasteSearch"
+                placeholder="Contoh: botol plastik..."
+                onkeydown="handleWasteEnter(event)"
+              >
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+
+            <div class="quick-items">
+              <span class="quick-item" onclick="searchWaste('botol plastik')">Botol plastik</span>
+              <span class="quick-item" onclick="searchWaste('kulit buah')">Kulit buah</span>
+              <span class="quick-item" onclick="searchWaste('kardus')">Kardus</span>
+              <span class="quick-item" onclick="searchWaste('kaleng')">Kaleng</span>
+              <span class="quick-item" onclick="searchWaste('baterai')">Baterai</span>
+            </div>
+
+          </div>
+
+
+          <div class="result-panel reveal">
+
+            <div class="result-empty" id="resultEmpty">
+              <div>
+                <i class="fa-solid fa-recycle"></i>
+                <h3 style="font-family:'Playfair Display';color:var(--green-dark);">
+                  Cari barang terlebih dahulu
+                </h3>
+                <p style="font-size:10px;margin-top:7px;">
+                  Hasil panduan akan muncul di sini.
+                </p>
+              </div>
+            </div>
+
+            <div class="result-content" id="resultContent">
+
+              <div class="result-header">
+
+                <div class="result-icon" id="resultIcon">
+                  ♻️
+                </div>
+
+                <div>
+                  <h3 id="resultName">Botol Plastik</h3>
+                  <div class="result-category" id="resultCategory">
+                    Dapat Didaur Ulang
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="result-info">
+                <strong>📦 Kategori</strong>
+                <p id="resultCategoryText">
+                  Sampah yang dapat diproses kembali.
+                </p>
+              </div>
+
+              <div class="result-info">
+                <strong>💡 Cara Menangani</strong>
+                <p id="resultHow">
+                  Bersihkan dan pisahkan dari sampah lain sebelum
+                  dikumpulkan untuk didaur ulang.
+                </p>
+              </div>
+
+              <button class="btn btn-green" onclick="markWasteSorted()">
+                <i class="fa-solid fa-check"></i>
+                Saya Sudah Memilah
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         CHALLENGE
+    ========================================================= -->
+
+    <section class="challenge-section" id="challenge">
+
+      <div class="container">
+
+        <div class="challenge-top">
+
+          <div class="section-head reveal">
+            <span class="section-tag">Daily Eco Challenge</span>
+
+            <h2 class="section-title">
+              Tantangan kecil, dampak besar.
+            </h2>
+
+            <p class="section-description">
+              Pilih aksi sederhana yang bisa kamu lakukan hari ini.
+            </p>
+          </div>
+
+          <div class="points-pill">
+            🌱 <span id="challengePoints">0</span> Eco Points
+          </div>
+
+        </div>
+
+
+        <div class="challenge-grid">
+
+          <div class="challenge-card reveal" data-challenge="0">
+            <div class="challenge-number">💧</div>
+            <h3>Hemat Air</h3>
+            <p>
+              Matikan keran ketika sedang tidak digunakan.
+            </p>
+            <button class="challenge-button" onclick="completeChallenge(0)">
+              Selesaikan +10
+            </button>
+          </div>
+
+          <div class="challenge-card reveal" data-challenge="1">
+            <div class="challenge-number">🥤</div>
+            <h3>Bawa Tumbler</h3>
+            <p>
+              Gunakan botol minum sendiri daripada membeli botol sekali pakai.
+            </p>
+            <button class="challenge-button" onclick="completeChallenge(1)">
+              Selesaikan +10
+            </button>
+          </div>
+
+          <div class="challenge-card reveal" data-challenge="2">
+            <div class="challenge-number">💡</div>
+            <h3>Hemat Listrik</h3>
+            <p>
+              Matikan lampu dan perangkat elektronik yang tidak digunakan.
+            </p>
+            <button class="challenge-button" onclick="completeChallenge(2)">
+              Selesaikan +10
+            </button>
+          </div>
+
+          <div class="challenge-card reveal" data-challenge="3">
+            <div class="challenge-number">♻️</div>
+            <h3>Pilah Sampah</h3>
+            <p>
+              Pisahkan sampah sesuai jenisnya sebelum dibuang.
+            </p>
+            <button class="challenge-button" onclick="completeChallenge(3)">
+              Selesaikan +10
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         TRACKER
+    ========================================================= -->
+
+    <section class="tracker-section" id="tracker">
+
+      <div class="container">
+
+        <div class="section-head reveal">
+          <span class="section-tag">Eco Tracker</span>
+          <h2 class="section-title">Lihat perjalanan hijaumu.</h2>
+          <p class="section-description">
+            Catat aksi kecilmu dan lihat perkembangan Eco Score secara langsung.
+          </p>
+        </div>
+
+
+        <div class="tracker-layout">
+
+          <div class="tracker-score reveal">
+
+            <h3>🌿 Eco Score</h3>
+
+            <div class="big-score" id="trackerScore">
+              0
+            </div>
+
+            <div class="score-bar">
+              <div class="score-fill" id="scoreFill"></div>
+            </div>
+
+            <div class="score-caption">
+              <span>0</span>
+              <span>100</span>
+            </div>
+
+            <div class="tracker-stats">
+
+              <div class="tracker-stat">
+                <strong id="trackerChallenge">0</strong>
+                <span>Challenge</span>
+              </div>
+
+              <div class="tracker-stat">
+                <strong id="trackerWaste">0</strong>
+                <span>Sampah Dipilah</span>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="tracker-actions reveal">
+
+            <h3>Aktivitas Hari Ini</h3>
+
+            <div class="activity-list">
+
+              <div class="activity-row">
+                <div class="activity-left">
+                  <div class="activity-icon">
+                    <i class="fa-solid fa-droplet"></i>
+                  </div>
+
+                  <div>
+                    <strong>Hemat Air</strong>
+                    <span>Gunakan air secukupnya</span>
+                  </div>
+                </div>
+
+                <button class="check-button" onclick="toggleActivity(this, 5)">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+              </div>
+
+
+              <div class="activity-row">
+                <div class="activity-left">
+                  <div class="activity-icon">
+                    <i class="fa-solid fa-lightbulb"></i>
+                  </div>
+
+                  <div>
+                    <strong>Hemat Listrik</strong>
+                    <span>Matikan perangkat yang tidak digunakan</span>
+                  </div>
+                </div>
+
+                <button class="check-button" onclick="toggleActivity(this, 5)">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+              </div>
+
+
+              <div class="activity-row">
+                <div class="activity-left">
+                  <div class="activity-icon">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                  </div>
+
+                  <div>
+                    <strong>Kurangi Plastik</strong>
+                    <span>Gunakan tas belanja reusable</span>
+                  </div>
+                </div>
+
+                <button class="check-button" onclick="toggleActivity(this, 5)">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+              </div>
+
+
+              <div class="activity-row">
+                <div class="activity-left">
+                  <div class="activity-icon">
+                    <i class="fa-solid fa-bicycle"></i>
+                  </div>
+
+                  <div>
+                    <strong>Transportasi Hijau</strong>
+                    <span>Jalan kaki atau bersepeda jika memungkinkan</span>
+                  </div>
+                </div>
+
+                <button class="check-button" onclick="toggleActivity(this, 5)">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         TIPS
+    ========================================================= -->
+
+    <section class="tips-section" id="tips">
+
+      <div class="container">
+
+        <div class="section-head reveal">
+          <span class="section-tag">Eco Tips</span>
+          <h2 class="section-title">Tips sederhana setiap hari.</h2>
+          <p class="section-description">
+            Kebiasaan kecil yang mudah diterapkan di rumah maupun sekolah.
+          </p>
+        </div>
+
+
+        <div class="filter-tabs">
+
+          <button class="filter-tab active" onclick="filterTips('all', this)">
+            Semua
+          </button>
+
+          <button class="filter-tab" onclick="filterTips('air', this)">
+            💧 Air
+          </button>
+
+          <button class="filter-tab" onclick="filterTips('energi', this)">
+            ⚡ Energi
+          </button>
+
+          <button class="filter-tab" onclick="filterTips('sampah', this)">
+            ♻️ Sampah
+          </button>
+
+          <button class="filter-tab" onclick="filterTips('kebiasaan', this)">
+            🌱 Kebiasaan
+          </button>
+
+        </div>
+
+
+        <div class="tips-grid" id="tipsGrid">
+
+          <div class="tip-card reveal" data-category="air">
+            <div class="tip-top">
+              <div class="tip-icon">💧</div>
+              <span class="tip-category">Air</span>
+            </div>
+            <h3>Matikan Keran</h3>
+            <p>
+              Jangan biarkan air mengalir ketika sedang menyikat gigi
+              atau melakukan aktivitas lain.
+            </p>
+          </div>
+
+
+          <div class="tip-card reveal" data-category="energi">
+            <div class="tip-top">
+              <div class="tip-icon">💡</div>
+              <span class="tip-category">Energi</span>
+            </div>
+            <h3>Matikan Lampu</h3>
+            <p>
+              Biasakan mematikan lampu ketika ruangan sudah tidak digunakan.
+            </p>
+          </div>
+
+
+          <div class="tip-card reveal" data-category="sampah">
+            <div class="tip-top">
+              <div class="tip-icon">♻️</div>
+              <span class="tip-category">Sampah</span>
+            </div>
+            <h3>Pilah dari Rumah</h3>
+            <p>
+              Pisahkan sampah berdasarkan jenisnya sebelum memasukkannya
+              ke tempat sampah.
+            </p>
+          </div>
+
+
+          <div class="tip-card reveal" data-category="kebiasaan">
+            <div class="tip-top">
+              <div class="tip-icon">🥤</div>
+              <span class="tip-category">Kebiasaan</span>
+            </div>
+            <h3>Bawa Tumbler</h3>
+            <p>
+              Membawa botol minum sendiri dapat membantu mengurangi
+              penggunaan botol sekali pakai.
+            </p>
+          </div>
+
+
+          <div class="tip-card reveal" data-category="sampah">
+            <div class="tip-top">
+              <div class="tip-icon">🛍️</div>
+              <span class="tip-category">Sampah</span>
+            </div>
+            <h3>Gunakan Tas Belanja</h3>
+            <p>
+              Simpan tas belanja yang bisa digunakan kembali agar tidak
+              perlu selalu menggunakan kantong sekali pakai.
+            </p>
+          </div>
+
+
+          <div class="tip-card reveal" data-category="kebiasaan">
+            <div class="tip-top">
+              <div class="tip-icon">🚶</div>
+              <span class="tip-category">Kebiasaan</span>
+            </div>
+            <h3>Berjalan Kaki</h3>
+            <p>
+              Untuk jarak dekat, pertimbangkan berjalan kaki atau
+              menggunakan sepeda jika aman dan memungkinkan.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         ACHIEVEMENTS
+    ========================================================= -->
+
+    <section class="achievement-section" id="achievement">
+
+      <div class="container">
+
+        <div class="section-head reveal">
+          <span class="section-tag">Eco Achievement</span>
+          <h2 class="section-title">Setiap aksi punya pencapaian.</h2>
+          <p class="section-description">
+            Kumpulkan poin dan buka badge dengan menyelesaikan berbagai aksi.
+          </p>
+        </div>
+
+
+        <div class="achievement-grid">
+
+          <div class="achievement unlocked" id="badge1">
+            <div class="badge">🌱</div>
+            <strong>Green Starter</strong>
+            <span>Mulai perjalanan hijaumu.</span>
+          </div>
+
+          <div class="achievement" id="badge2">
+            <div class="badge">♻️</div>
+            <strong>Recycle Hero</strong>
+            <span>Pilah sampah 3 kali.</span>
+          </div>
+
+          <div class="achievement" id="badge3">
+            <div class="badge">💧</div>
+            <strong>Water Saver</strong>
+            <span>Selesaikan 2 aktivitas.</span>
+          </div>
+
+          <div class="achievement" id="badge4">
+            <div class="badge">⚡</div>
+            <strong>Energy Saver</strong>
+            <span>Kumpulkan 30 poin.</span>
+          </div>
+
+          <div class="achievement" id="badge5">
+            <div class="badge">🌍</div>
+            <strong>Eco Warrior</strong>
+            <span>Kumpulkan 50 poin.</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         CTA
+    ========================================================= -->
+
+    <section class="cta-section">
+
+      <div class="container">
+
+        <div class="cta-box reveal">
+
+          <h2>Siap mulai perubahanmu? 🌱</h2>
+
+          <p>
+            Tidak perlu menunggu menjadi sempurna.
+            Pilih satu kebiasaan baik hari ini dan mulai dari sana.
+          </p>
+
+          <a href="#challenge" class="btn">
+            <i class="fa-solid fa-seedling"></i>
+            Mulai Eco Challenge
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================= -->
+
+  <footer>
+
+    <div class="container">
+
+      <div class="footer-grid">
+
+        <div>
+
+          <div class="footer-logo">
+            <div class="logo-icon">
+              <i class="fa-solid fa-leaf"></i>
+            </div>
+
+            <strong>EcoLife</strong>
+          </div>
+
+          <p class="footer-about">
+            Platform sederhana untuk membantu membangun kebiasaan
+            ramah lingkungan melalui aksi kecil yang bisa dilakukan
+            setiap hari.
+          </p>
+
+        </div>
+
+
+        <div>
+
+          <h4>Jelajahi</h4>
+
+          <ul>
+            <li><a href="#home">Beranda</a></li>
+            <li><a href="#pilah">Pilah Sampah</a></li>
+            <li><a href="#challenge">Eco Challenge</a></li>
+            <li><a href="#tracker">Eco Tracker</a></li>
+          </ul>
+
+        </div>
+
+
+        <div>
+
+          <h4>EcoLife</h4>
+
+          <ul>
+            <li><a href="#tips">Eco Tips</a></li>
+            <li><a href="#achievement">Achievement</a></li>
+            <li><a href="#about">Tentang EcoLife</a></li>
+          </ul>
+
+        </div>
+
+
+        <div>
+
+          <h4>Ingat 🌱</h4>
+
+          <p style="color:#91aa98;font-size:10px;line-height:1.8;">
+            "Tidak harus melakukan semuanya.
+            Mulailah dengan satu hal kecil
+            yang bisa kamu lakukan hari ini."
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="footer-bottom">
+        <span>© 2026 EcoLife. Small Actions, Big Impact.</span>
+        <span>Dibuat untuk bumi yang lebih baik 🌍</span>
+      </div>
+
+    </div>
+
+  </footer>
+
+
+  <!-- =========================================================
+       MODAL
+  ========================================================= -->
+
+  <div class="modal" id="modal">
+
+    <div class="modal-card">
+
+      <button class="modal-close" onclick="closeModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="modal-icon" id="modalIcon">
+        🌱
+      </div>
+
+      <h3 id="modalTitle">
+        EcoLife
+      </h3>
+
+      <p id="modalText">
+        Small actions, big impact.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- TOAST -->
+
+  <div class="toast" id="toast">
+    🌱 Aktivitas berhasil dicatat!
+  </div>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================= -->
+
+  <script>
+
+    /* =========================================================
+       DATA
+    ========================================================= */
+
+    const wasteData = [
+
+      {
+        keywords: ["botol", "botol plastik", "plastik"],
+        name: "Botol Plastik",
+        icon: "🧴",
+        category: "Dapat Didaur Ulang",
+        description: "Botol plastik termasuk sampah yang dapat dikumpulkan dan diproses kembali.",
+        how: "Kosongkan, bilas jika memungkinkan, kemudian pisahkan dari sampah lainnya."
+      },
+
+      {
+        keywords: ["kulit buah", "kulit", "buah", "sayur", "sisa makanan"],
+        name: "Sisa Makanan / Kulit Buah",
+        icon: "🍌",
+        category: "Organik",
+        description: "Sisa makanan dan kulit buah termasuk sampah organik.",
+        how: "Pisahkan dari sampah lainnya. Jika memungkinkan, dapat dimanfaatkan untuk kompos."
+      },
+
+      {
+        keywords: ["kardus", "karton", "kertas"],
+        name: "Kardus / Kertas",
+        icon: "📦",
+        category: "Dapat Didaur Ulang",
+        description: "Kertas dan kardus yang bersih dapat dikumpulkan untuk proses daur ulang.",
+        how: "Lipat dan pisahkan dari sampah basah agar tetap kering."
+      },
+
+      {
+        keywords: ["kaleng", "aluminium", "besi"],
+        name: "Kaleng",
+        icon: "🥫",
+        category: "Dapat Didaur Ulang",
+        description: "Kaleng logam dapat dikumpulkan untuk didaur ulang.",
+        how: "Kosongkan isinya dan pisahkan dari sampah lain."
+      },
+
+      {
+        keywords: ["baterai", "battery"],
+        name: "Baterai",
+        icon: "🔋",
+        category: "Limbah Khusus",
+        description: "Baterai perlu ditangani secara khusus dan sebaiknya tidak dicampur dengan sampah rumah tangga biasa.",
+        how: "Simpan terpisah dan cari fasilitas pengumpulan limbah elektronik atau baterai yang sesuai di daerahmu."
+      },
+
+      {
+        keywords: ["kaca", "botol kaca"],
+        name: "Kaca",
+        icon: "🍾",
+        category: "Dapat Didaur Ulang",
+        description: "Kaca dapat didaur ulang, tetapi perlu ditangani dengan hati-hati.",
+        how: "Pisahkan dengan aman dan gunakan wadah yang tidak mudah pecah saat mengumpulkannya."
+      }
+
+    ];
+
+
+    /* =========================================================
+       STATE
+    ========================================================= */
+
+    let ecoData = JSON.parse(localStorage.getItem("ecoLifeData")) || {
+      points: 0,
+      challenges: [],
+      wasteSorted: 0,
+      activities: 0
+    };
+
+
+    /* =========================================================
+       SAVE DATA
+    ========================================================= */
+
+    function saveData() {
+      localStorage.setItem("ecoLifeData", JSON.stringify(ecoData));
+    }
+
+
+    /* =========================================================
+       CALCULATE SCORE
+    ========================================================= */
+
+    function calculateScore() {
+
+      let score =
+        (ecoData.points) +
+        (ecoData.wasteSorted * 5) +
+        (ecoData.activities * 5);
+
+      return Math.min(score, 100);
+    }
+
+
+    /* =========================================================
+       UPDATE DASHBOARD
+    ========================================================= */
+
+    function updateDashboard() {
+
+      const score = calculateScore();
+
+      document.getElementById("heroScore").textContent = score;
+      document.getElementById("trackerScore").textContent = score;
+
+      document.getElementById("heroWaste").textContent =
+        ecoData.wasteSorted;
+
+      document.getElementById("heroChallenge").textContent =
+        ecoData.challenges.length;
+
+      document.getElementById("trackerChallenge").textContent =
+        ecoData.challenges.length;
+
+      document.getElementById("trackerWaste").textContent =
+        ecoData.wasteSorted;
+
+      document.getElementById("challengePoints").textContent =
+        ecoData.points;
+
+      document.getElementById("scoreFill").style.width =
+        score + "%";
+
+      updateAchievements();
+
+    }
+
+
+    /* =========================================================
+       MOBILE MENU
+    ========================================================= */
+
+    function toggleMobileMenu() {
+
+      const menu = document.getElementById("mobileMenu");
+      const icon = document.getElementById("menuIcon");
+
+      menu.classList.toggle("show");
+
+      if (menu.classList.contains("show")) {
+        icon.className = "fa-solid fa-xmark";
+      } else {
+        icon.className = "fa-solid fa-bars";
+      }
+    }
+
+
+    document.querySelectorAll(".mobile-link").forEach(link => {
+
+      link.addEventListener("click", () => {
+
+        document.getElementById("mobileMenu").classList.remove("show");
+
+        document.getElementById("menuIcon").className =
+          "fa-solid fa-bars";
+
+      });
+
+    });
+
+
+    /* =========================================================
+       NAVBAR SCROLL
+    ========================================================= */
+
+    window.addEventListener("scroll", () => {
+
+      const navbar = document.getElementById("navbar");
+
+      if (window.scrollY > 30) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+
+    });
+
+
+    /* =========================================================
+       WASTE SEARCH
+    ========================================================= */
+
+    function handleWasteEnter(event) {
+
+      if (event.key === "Enter") {
+
+        searchWaste(
+          document.getElementById("wasteSearch").value
+        );
+
+      }
+
+    }
+
+
+    function searchWaste(query) {
+
+      query = query.toLowerCase().trim();
+
+      if (!query) {
+
+        showToast("Masukkan nama barang terlebih dahulu.");
+
+        return;
+
+      }
+
+      const found = wasteData.find(item =>
+        item.keywords.some(keyword =>
+          query.includes(keyword) ||
+          keyword.includes(query)
+        )
+      );
+
+      if (!found) {
+
+        document.getElementById("resultEmpty").style.display = "grid";
+
+        document.getElementById("resultContent").classList.remove("show");
+
+        showToast("Barang belum ditemukan di panduan.");
+
+        return;
+
+      }
+
+      document.getElementById("resultEmpty").style.display = "none";
+
+      document.getElementById("resultContent").classList.add("show");
+
+      document.getElementById("resultIcon").textContent =
+        found.icon;
+
+      document.getElementById("resultName").textContent =
+        found.name;
+
+      document.getElementById("resultCategory").textContent =
+        found.category;
+
+      document.getElementById("resultCategoryText").textContent =
+        found.description;
+
+      document.getElementById("resultHow").textContent =
+        found.how;
+
+    }
+
+
+    /* =========================================================
+       MARK WASTE SORTED
+    ========================================================= */
+
+    function markWasteSorted() {
+
+      ecoData.wasteSorted++;
+
+      ecoData.points += 5;
+
+      saveData();
+
+      updateDashboard();
+
+      showToast("♻️ Mantap! Sampah berhasil dicatat.");
+
+      openModal(
+        "♻️",
+        "Good Job!",
+        "Satu aksi kecil sudah kamu lakukan untuk lingkungan. +5 Eco Points!"
+      );
+
+    }
+
+
+    /* =========================================================
+       CHALLENGE
+    ========================================================= */
+
+    function completeChallenge(index) {
+
+      if (ecoData.challenges.includes(index)) {
+
+        showToast("Challenge ini sudah selesai.");
+
+        return;
+
+      }
+
+      ecoData.challenges.push(index);
+
+      ecoData.points += 10;
+
+      saveData();
+
+      const card =
+        document.querySelector(
+          `.challenge-card[data-challenge="${index}"]`
+        );
+
+      if (card) {
+
+        card.classList.add("completed");
+
+        const button =
+          card.querySelector(".challenge-button");
+
+        button.textContent = "✓ Selesai";
+
+      }
+
+      updateDashboard();
+
+      showToast("🌱 Challenge selesai! +10 Eco Points");
+
+      openModal(
+        "🏆",
+        "Challenge Selesai!",
+        "Keren! Kamu baru saja menyelesaikan satu aksi ramah lingkungan."
+      );
+
+    }
+
+
+    /* =========================================================
+       RESTORE CHALLENGES
+    ========================================================= */
+
+    function restoreChallenges() {
+
+      ecoData.challenges.forEach(index => {
+
+        const card =
+          document.querySelector(
+            `.challenge-card[data-challenge="${index}"]`
+          );
+
+        if (!card) return;
+
+        card.classList.add("completed");
+
+        const button =
+          card.querySelector(".challenge-button");
+
+        button.textContent = "✓ Selesai";
+
+      });
+
+    }
+
+
+    /* =========================================================
+       TRACKER ACTIVITIES
+    ========================================================= */
+
+    function toggleActivity(button, points) {
+
+      if (button.classList.contains("checked")) {
+
+        button.classList.remove("checked");
+
+        ecoData.activities =
+          Math.max(0, ecoData.activities - 1);
+
+        ecoData.points =
+          Math.max(0, ecoData.points - points);
+
+        showToast("Aktivitas dibatalkan.");
+
+      } else {
+
+        button.classList.add("checked");
+
+        ecoData.activities++;
+
+        ecoData.points += points;
+
+        showToast("🌱 Aktivitas dicatat! +" + points + " poin");
+
+      }
+
+      saveData();
+
+      updateDashboard();
+
+    }
+
+
+    /* =========================================================
+       TIPS FILTER
+    ========================================================= */
+
+    function filterTips(category, button) {
+
+      document
+        .querySelectorAll(".filter-tab")
+        .forEach(tab => tab.classList.remove("active"));
+
+      button.classList.add("active");
+
+      document
+        .querySelectorAll(".tip-card")
+        .forEach(card => {
+
+          const cardCategory =
+            card.dataset.category;
+
+          if (
+            category === "all" ||
+            cardCategory === category
+          ) {
+
+            card.style.display = "block";
+
+            setTimeout(() => {
+              card.style.opacity = "1";
+            }, 20);
+
+          } else {
+
+            card.style.display = "none";
+
+          }
+
+        });
+
+    }
+
+
+    /* =========================================================
+       ACHIEVEMENTS
+    ========================================================= */
+
+    function updateAchievements() {
+
+      const score = calculateScore();
+
+      const badge2 =
+        document.getElementById("badge2");
+
+      const badge3 =
+        document.getElementById("badge3");
+
+      const badge4 =
+        document.getElementById("badge4");
+
+      const badge5 =
+        document.getElementById("badge5");
+
+
+      if (ecoData.wasteSorted >= 3) {
+        badge2.classList.add("unlocked");
+      }
+
+      if (ecoData.activities >= 2) {
+        badge3.classList.add("unlocked");
+      }
+
+      if (ecoData.points >= 30) {
+        badge4.classList.add("unlocked");
+      }
+
+      if (ecoData.points >= 50) {
+        badge5.classList.add("unlocked");
+      }
+
+    }
+
+
+    /* =========================================================
+       DARK MODE
+    ========================================================= */
+
+    let darkMode =
+      localStorage.getItem("ecoDarkMode") === "true";
+
+
+    function applyDarkMode() {
+
+      if (darkMode) {
+
+        document.documentElement.style.setProperty(
+          "--cream",
+          "#101b15"
+        );
+
+        document.documentElement.style.setProperty(
+          "--cream-dark",
+          "#18271e"
+        );
+
+        document.documentElement.style.setProperty(
+          "--white",
+          "#16231b"
+        );
+
+        document.documentElement.style.setProperty(
+          "--text",
+          "#e4eee5"
+        );
+
+        document.documentElement.style.setProperty(
+          "--muted",
+          "#a5b5a9"
+        );
+
+        document.body.style.background = "#101b15";
+
+        document
+          .getElementById("themeIcon")
+          .className = "fa-solid fa-sun";
+
+      } else {
+
+        document.documentElement.style.setProperty(
+          "--cream",
+          "#f7f8ef"
+        );
+
+        document.documentElement.style.setProperty(
+          "--cream-dark",
+          "#eaf0e2"
+        );
+
+        document.documentElement.style.setProperty(
+          "--white",
+          "#ffffff"
+        );
+
+        document.documentElement.style.setProperty(
+          "--text",
+          "#24332a"
+        );
+
+        document.documentElement.style.setProperty(
+          "--muted",
+          "#6b776e"
+        );
+
+        document.body.style.background = "#f7f8ef";
+
+        document
+          .getElementById("themeIcon")
+          .className = "fa-solid fa-moon";
+
+      }
+
+    }
+
+
+    function toggleDarkMode() {
+
+      darkMode = !darkMode;
+
+      localStorage.setItem(
+        "ecoDarkMode",
+        darkMode
+      );
+
+      applyDarkMode();
+
+      showToast(
+        darkMode
+          ? "🌙 Mode gelap aktif."
+          : "☀️ Mode terang aktif."
+      );
+
+    }
+
+
+    /* =========================================================
+       MODAL
+    ========================================================= */
+
+    function openModal(icon, title, text) {
+
+      document.getElementById("modalIcon").textContent =
+        icon;
+
+      document.getElementById("modalTitle").textContent =
+        title;
+
+      document.getElementById("modalText").textContent =
+        text;
+
+      document
+        .getElementById("modal")
+        .classList.add("show");
+
+      document.body.classList.add("modal-open");
+
+    }
+
+
+    function closeModal() {
+
+      document
+        .getElementById("modal")
+        .classList.remove("show");
+
+      document.body.classList.remove("modal-open");
+
+    }
+
+
+    document
+      .getElementById("modal")
+      .addEventListener("click", event => {
+
+        if (event.target.id === "modal") {
+          closeModal();
+        }
+
+      });
+
+
+    document.addEventListener("keydown", event => {
+
+      if (event.key === "Escape") {
+        closeModal();
+      }
+
+    });
+
+
+    /* =========================================================
+       TOAST
+    ========================================================= */
+
+    let toastTimer;
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      clearTimeout(toastTimer);
+
+      toastTimer = setTimeout(() => {
+
+        toast.classList.remove("show");
+
+      }, 2600);
+
+    }
+
+
+    /* =========================================================
+       SCROLL REVEAL
+    ========================================================= */
+
+    const observer =
+      new IntersectionObserver(
+        entries => {
+
+          entries.forEach(entry => {
+
+            if (entry.isIntersecting) {
+
+              entry.target.classList.add("visible");
+
+              observer.unobserve(entry.target);
+
+            }
+
+          });
+
+        },
+        {
+          threshold: .12
+        }
+      );
+
+
+    document
+      .querySelectorAll(".reveal")
+      .forEach(element => {
+
+        observer.observe(element);
+
+      });
+
+
+    /* =========================================================
+       ACTIVE NAV
+    ========================================================= */
+
+    const sections =
+      document.querySelectorAll("main section[id]");
+
+    const navLinks =
+      document.querySelectorAll(".nav-link");
+
+    window.addEventListener("scroll", () => {
+
+      let current = "";
+
+      sections.forEach(section => {
+
+        const sectionTop =
+          section.offsetTop - 150;
+
+        if (window.scrollY >= sectionTop) {
+          current = section.id;
+        }
+
+      });
+
+      navLinks.forEach(link => {
+
+        link.classList.remove("active");
+
+        if (
+          link.getAttribute("href") ===
+          "#" + current
+        ) {
+
+          link.classList.add("active");
+
+        }
+
+      });
+
+    });
+
+
+    /* =========================================================
+       INIT
+    ========================================================= */
+
+    applyDarkMode();
+
+    restoreChallenges();
+
+    updateDashboard();
+
+  </script>
+
+</body>
+</html>

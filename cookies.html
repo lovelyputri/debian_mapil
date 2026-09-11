@@ -1,0 +1,2754 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Crumbly — Homemade Cookies</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --cream:#fffaf3;
+    --cream-dark:#f7ead9;
+    --brown:#42271b;
+    --brown-light:#684332;
+    --caramel:#c8783d;
+    --caramel-light:#e9a76d;
+    --green:#788a61;
+    --green-light:#dce4ce;
+    --red:#a9524e;
+    --red-light:#f0cbc7;
+    --white:#fff;
+    --text:#5f4b40;
+    --shadow:0 25px 70px rgba(66,39,27,.10);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:"DM Sans",sans-serif;
+    background:var(--cream);
+    color:var(--brown);
+    overflow-x:hidden;
+}
+
+button,
+input,
+select,
+textarea{
+    font-family:inherit;
+}
+
+/* =========================
+   LOADER
+========================= */
+
+.loader{
+    position:fixed;
+    inset:0;
+    background:var(--cream);
+    z-index:99999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.7s ease;
+}
+
+.loader.hide{
+    opacity:0;
+    visibility:hidden;
+}
+
+.loader-inner{
+    text-align:center;
+}
+
+.loader-cookie{
+    font-size:75px;
+    animation:loaderBounce 1s infinite;
+}
+
+.loader-inner p{
+    margin-top:12px;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:1px;
+}
+
+@keyframes loaderBounce{
+    0%,100%{
+        transform:translateY(0) rotate(-8deg);
+    }
+    50%{
+        transform:translateY(-20px) rotate(8deg);
+    }
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    position:fixed;
+    width:100%;
+    top:0;
+    left:0;
+    z-index:5000;
+    padding:22px 7%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition:.35s ease;
+}
+
+.navbar.scrolled{
+    padding:13px 7%;
+    background:rgba(255,250,243,.88);
+    backdrop-filter:blur(18px);
+    box-shadow:0 8px 35px rgba(66,39,27,.08);
+}
+
+.logo{
+    text-decoration:none;
+    font-family:"Playfair Display",serif;
+    font-size:28px;
+    font-weight:700;
+    color:var(--brown);
+}
+
+.logo span{
+    color:var(--caramel);
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:30px;
+    list-style:none;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:var(--brown);
+    font-size:13px;
+    font-weight:700;
+    position:relative;
+}
+
+.nav-links a:not(.nav-cta)::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-7px;
+    width:0;
+    height:2px;
+    background:var(--caramel);
+    transition:.3s;
+}
+
+.nav-links a:not(.nav-cta):hover::after{
+    width:100%;
+}
+
+.nav-cta{
+    color:white!important;
+    background:var(--brown);
+    padding:12px 19px;
+    border-radius:30px;
+    transition:.3s;
+}
+
+.nav-cta:hover{
+    transform:translateY(-3px);
+    background:var(--caramel);
+}
+
+.menu{
+    display:none;
+    background:none;
+    border:none;
+    font-size:27px;
+    cursor:pointer;
+    color:var(--brown);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    min-height:100vh;
+    padding:140px 7% 80px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:center;
+    gap:50px;
+    position:relative;
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+    width:650px;
+    height:650px;
+    border-radius:50%;
+    background:#f3dfc6;
+    right:-200px;
+    top:80px;
+    animation:blobMove 8s ease-in-out infinite;
+}
+
+.hero::after{
+    content:"";
+    position:absolute;
+    width:250px;
+    height:250px;
+    border-radius:50%;
+    background:#f8e9d8;
+    left:-100px;
+    bottom:-100px;
+}
+
+@keyframes blobMove{
+    0%,100%{
+        transform:translate(0,0) scale(1);
+    }
+    50%{
+        transform:translate(-25px,25px) scale(1.05);
+    }
+}
+
+.hero-content{
+    position:relative;
+    z-index:3;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 16px;
+    background:#f6e4cf;
+    border-radius:30px;
+    font-size:12px;
+    font-weight:800;
+    color:var(--brown-light);
+    animation:fadeUp .8s ease both;
+}
+
+.hero h1{
+    font-family:"Playfair Display",serif;
+    font-size:clamp(54px,6.3vw,88px);
+    line-height:.95;
+    letter-spacing:-4px;
+    margin-top:22px;
+    animation:fadeUp .8s .1s ease both;
+}
+
+.hero h1 em{
+    color:var(--caramel);
+    font-style:italic;
+}
+
+.hero-description{
+    max-width:570px;
+    margin:25px 0;
+    color:#826e62;
+    line-height:1.8;
+    font-size:16px;
+    animation:fadeUp .8s .2s ease both;
+}
+
+.hero-actions{
+    display:flex;
+    gap:13px;
+    animation:fadeUp .8s .3s ease both;
+}
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    padding:15px 23px;
+    border-radius:40px;
+    font-size:13px;
+    font-weight:800;
+    transition:.3s ease;
+}
+
+.btn-dark{
+    background:var(--brown);
+    color:white;
+    box-shadow:0 15px 35px rgba(66,39,27,.18);
+}
+
+.btn-dark:hover{
+    transform:translateY(-5px);
+    box-shadow:0 20px 45px rgba(66,39,27,.25);
+}
+
+.btn-outline{
+    color:var(--brown);
+    border:1px solid #dfcabc;
+    background:rgba(255,255,255,.4);
+}
+
+.btn-outline:hover{
+    background:white;
+    transform:translateY(-5px);
+}
+
+.hero-stats{
+    display:flex;
+    gap:30px;
+    margin-top:40px;
+    animation:fadeUp .8s .4s ease both;
+}
+
+.stat strong{
+    font-family:"Playfair Display",serif;
+    font-size:24px;
+}
+
+.stat p{
+    font-size:10px;
+    color:#9b867a;
+    margin-top:2px;
+}
+
+/* =========================
+   HERO VISUAL
+========================= */
+
+.hero-visual{
+    height:570px;
+    position:relative;
+    z-index:2;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.glow{
+    position:absolute;
+    width:440px;
+    height:440px;
+    background:#e6c394;
+    border-radius:50%;
+    filter:blur(2px);
+    opacity:.55;
+}
+
+.cookie-plate{
+    position:absolute;
+    width:380px;
+    height:80px;
+    background:rgba(66,39,27,.13);
+    border-radius:50%;
+    bottom:105px;
+    filter:blur(15px);
+    animation:plateShadow 5s ease-in-out infinite;
+}
+
+@keyframes plateShadow{
+    0%,100%{
+        transform:scaleX(1);
+    }
+    50%{
+        transform:scaleX(.8);
+    }
+}
+
+.big-cookie{
+    position:relative;
+    width:340px;
+    height:340px;
+    border-radius:50%;
+    background:
+        radial-gradient(circle at 26% 28%,#673d28 0 11px,transparent 12px),
+        radial-gradient(circle at 66% 25%,#673d28 0 13px,transparent 14px),
+        radial-gradient(circle at 40% 65%,#673d28 0 12px,transparent 13px),
+        radial-gradient(circle at 70% 68%,#673d28 0 9px,transparent 10px),
+        radial-gradient(circle at 25% 73%,#673d28 0 8px,transparent 9px),
+        radial-gradient(circle at 55% 48%,#673d28 0 7px,transparent 8px),
+        linear-gradient(145deg,#e4a15c,#b96832);
+    box-shadow:
+        inset -18px -25px 0 rgba(93,46,22,.15),
+        inset 10px 12px 0 rgba(255,255,255,.16),
+        0 35px 55px rgba(72,39,21,.25);
+    animation:cookieFloat 5s ease-in-out infinite;
+}
+
+.big-cookie::before{
+    content:"";
+    position:absolute;
+    inset:18px;
+    border-radius:50%;
+    border:2px dashed rgba(255,255,255,.22);
+}
+
+.bite{
+    position:absolute;
+    width:78px;
+    height:78px;
+    border-radius:50%;
+    background:#f3dfc6;
+    right:-3px;
+    top:43px;
+}
+
+.cookie-label{
+    position:absolute;
+    background:white;
+    padding:13px 18px;
+    border-radius:17px;
+    box-shadow:var(--shadow);
+    font-size:11px;
+    font-weight:800;
+    z-index:4;
+}
+
+.cookie-label small{
+    display:block;
+    color:#a08c80;
+    font-size:9px;
+    margin-top:3px;
+}
+
+.label-one{
+    left:10px;
+    top:120px;
+    animation:floating 4s ease-in-out infinite;
+}
+
+.label-two{
+    right:0;
+    bottom:125px;
+    animation:floating 4s 1s ease-in-out infinite;
+}
+
+.float{
+    position:absolute;
+    font-size:28px;
+    animation:floating 4s ease-in-out infinite;
+}
+
+.float-a{
+    top:70px;
+    left:80px;
+}
+
+.float-b{
+    right:70px;
+    top:70px;
+    animation-delay:1s;
+}
+
+.float-c{
+    bottom:100px;
+    left:60px;
+    animation-delay:1.7s;
+}
+
+.float-d{
+    right:55px;
+    bottom:80px;
+    animation-delay:2.2s;
+}
+
+@keyframes cookieFloat{
+    0%,100%{
+        transform:translateY(0) rotate(-5deg);
+    }
+    50%{
+        transform:translateY(-22px) rotate(5deg);
+    }
+}
+
+@keyframes floating{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-14px);
+    }
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* =========================
+   MARQUEE
+========================= */
+
+.marquee{
+    background:var(--brown);
+    color:white;
+    overflow:hidden;
+    padding:16px 0;
+}
+
+.marquee-track{
+    display:flex;
+    width:max-content;
+    animation:marquee 22s linear infinite;
+}
+
+.marquee-item{
+    padding:0 25px;
+    display:flex;
+    gap:18px;
+    align-items:center;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.marquee-item span{
+    color:#edaa70;
+    font-size:17px;
+}
+
+@keyframes marquee{
+    from{
+        transform:translateX(0);
+    }
+    to{
+        transform:translateX(-50%);
+    }
+}
+
+/* =========================
+   GENERAL
+========================= */
+
+section{
+    padding:110px 7%;
+}
+
+.section-title{
+    max-width:650px;
+    margin:0 auto 55px;
+    text-align:center;
+}
+
+.section-title small{
+    color:var(--caramel);
+    font-size:10px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:2px;
+}
+
+.section-title h2{
+    font-family:"Playfair Display",serif;
+    font-size:clamp(38px,5vw,60px);
+    line-height:1.05;
+    margin:12px 0 17px;
+}
+
+.section-title h2 em{
+    color:var(--caramel);
+}
+
+.section-title p{
+    color:#89766b;
+    line-height:1.7;
+    font-size:14px;
+}
+
+/* =========================
+   PRODUCTS
+========================= */
+
+.products{
+    background:#fff2e2;
+    position:relative;
+}
+
+.product-grid{
+    max-width:1150px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:25px;
+}
+
+.product-card{
+    background:white;
+    padding:15px;
+    border-radius:30px;
+    position:relative;
+    transition:.4s ease;
+    border:1px solid rgba(66,39,27,.06);
+}
+
+.product-card:hover{
+    transform:translateY(-13px);
+    box-shadow:var(--shadow);
+}
+
+.best{
+    position:absolute;
+    top:25px;
+    left:25px;
+    z-index:5;
+    background:var(--brown);
+    color:white;
+    padding:7px 12px;
+    border-radius:20px;
+    font-size:9px;
+    font-weight:800;
+}
+
+.product-photo{
+    height:250px;
+    border-radius:23px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    position:relative;
+}
+
+.original-bg{
+    background:#f0c28d;
+}
+
+.green-bg{
+    background:#cfd9bd;
+}
+
+.red-bg{
+    background:#e7b1ad;
+}
+
+.product-cookie{
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    position:relative;
+    transition:.5s;
+    box-shadow:
+        inset -10px -15px 0 rgba(70,35,20,.14),
+        0 20px 30px rgba(70,35,20,.18);
+}
+
+.product-card:hover .product-cookie{
+    transform:scale(1.1) rotate(8deg);
+}
+
+.original-cookie{
+    background:
+        radial-gradient(circle at 25% 30%,#633b27 0 8px,transparent 9px),
+        radial-gradient(circle at 65% 25%,#633b27 0 10px,transparent 11px),
+        radial-gradient(circle at 40% 70%,#633b27 0 9px,transparent 10px),
+        radial-gradient(circle at 73% 65%,#633b27 0 7px,transparent 8px),
+        #d68a45;
+}
+
+.green-cookie{
+    background:
+        radial-gradient(circle at 28% 25%,#f7f8ef 0 5px,transparent 6px),
+        radial-gradient(circle at 65% 30%,#82946c 0 8px,transparent 9px),
+        radial-gradient(circle at 40% 68%,#f7f8ef 0 5px,transparent 6px),
+        #9ead80;
+}
+
+.red-cookie{
+    background:
+        radial-gradient(circle at 28% 25%,#fff 0 5px,transparent 6px),
+        radial-gradient(circle at 65% 30%,#853a36 0 8px,transparent 9px),
+        radial-gradient(circle at 40% 68%,#fff 0 5px,transparent 6px),
+        #b9625c;
+}
+
+.product-info{
+    padding:20px 8px 8px;
+}
+
+.product-top{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.product-info h3{
+    font-family:"Playfair Display",serif;
+    font-size:25px;
+}
+
+.rating{
+    font-size:11px;
+    background:#fff4e7;
+    padding:6px 9px;
+    border-radius:15px;
+    white-space:nowrap;
+}
+
+.product-info p{
+    color:#8b776c;
+    font-size:12px;
+    line-height:1.7;
+    margin:9px 0 17px;
+}
+
+.product-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.price{
+    font-weight:800;
+    font-size:17px;
+}
+
+.price span{
+    font-size:10px;
+    color:#a08b80;
+    font-weight:500;
+}
+
+.select-product{
+    border:none;
+    background:var(--brown);
+    color:white;
+    padding:10px 15px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:800;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.select-product:hover{
+    background:var(--caramel);
+    transform:scale(1.05);
+}
+
+/* =========================
+   ABOUT
+========================= */
+
+.about{
+    max-width:1150px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:.9fr 1.1fr;
+    align-items:center;
+    gap:80px;
+}
+
+.about-art{
+    min-height:470px;
+    position:relative;
+}
+
+.package{
+    width:320px;
+    height:390px;
+    background:#e4bd91;
+    position:absolute;
+    left:50%;
+    bottom:0;
+    transform:translateX(-50%);
+    border-radius:35px 35px 20px 20px;
+    box-shadow:25px 30px 60px rgba(66,39,27,.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+.package::before{
+    content:"CRUMBLY";
+    font-family:"Playfair Display",serif;
+    font-size:43px;
+    font-weight:700;
+    letter-spacing:2px;
+    color:rgba(66,39,27,.17);
+    transform:rotate(-8deg);
+}
+
+.package::after{
+    content:"HOMEMADE COOKIES";
+    position:absolute;
+    bottom:65px;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:3px;
+    color:rgba(66,39,27,.35);
+}
+
+.about-cookie{
+    width:125px;
+    height:125px;
+    border-radius:50%;
+    position:absolute;
+    z-index:2;
+    background:#ce7e42;
+    box-shadow:0 20px 35px rgba(66,39,27,.2);
+}
+
+.about-cookie::after{
+    content:"🍪";
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
+    font-size:78px;
+}
+
+.about-cookie.a{
+    top:50px;
+    left:15px;
+    transform:rotate(-15deg);
+    animation:floating 4s infinite;
+}
+
+.about-cookie.b{
+    top:20px;
+    right:0;
+    transform:rotate(15deg) scale(.85);
+    animation:floating 4s 1s infinite;
+}
+
+.about-cookie.c{
+    bottom:20px;
+    right:25px;
+    transform:rotate(-10deg) scale(.72);
+    animation:floating 4s 1.7s infinite;
+}
+
+.about-text small{
+    color:var(--caramel);
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-size:10px;
+    font-weight:800;
+}
+
+.about-text h2{
+    font-family:"Playfair Display",serif;
+    font-size:clamp(38px,5vw,60px);
+    line-height:1.05;
+    margin:13px 0 22px;
+}
+
+.about-text h2 em{
+    color:var(--caramel);
+}
+
+.about-text>p{
+    color:#806d62;
+    line-height:1.8;
+    font-size:14px;
+    margin-bottom:25px;
+}
+
+.features{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.feature{
+    background:#fff5e8;
+    padding:15px;
+    border-radius:17px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    transition:.3s;
+}
+
+.feature:hover{
+    transform:translateY(-4px);
+}
+
+.feature-icon{
+    font-size:25px;
+}
+
+.feature strong{
+    display:block;
+    font-size:12px;
+}
+
+.feature span{
+    font-size:10px;
+    color:#947f74;
+}
+
+/* =========================
+   PROCESS
+========================= */
+
+.process{
+    background:var(--brown);
+    color:white;
+    position:relative;
+    overflow:hidden;
+}
+
+.process .section-title p{
+    color:#cdbab0;
+}
+
+.process .section-title small{
+    color:#e9a36b;
+}
+
+.steps{
+    max-width:950px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:30px;
+}
+
+.step{
+    text-align:center;
+    padding:15px;
+}
+
+.step-circle{
+    width:100px;
+    height:100px;
+    margin:auto auto 22px;
+    border-radius:50%;
+    background:#5a3628;
+    border:1px solid rgba(255,255,255,.1);
+    display:grid;
+    place-items:center;
+    font-size:36px;
+    transition:.4s;
+}
+
+.step:hover .step-circle{
+    transform:translateY(-10px) rotate(8deg);
+    background:#754934;
+}
+
+.step h3{
+    font-family:"Playfair Display",serif;
+    font-size:23px;
+    margin-bottom:8px;
+}
+
+.step p{
+    color:#c6b2a8;
+    font-size:12px;
+    line-height:1.7;
+}
+
+/* =========================
+   ORDER
+========================= */
+
+.order{
+    background:#fff2e2;
+}
+
+.order-box{
+    max-width:1100px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:.75fr 1.25fr;
+    background:white;
+    border-radius:35px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+}
+
+.order-side{
+    background:var(--brown);
+    color:white;
+    padding:45px;
+    position:relative;
+    overflow:hidden;
+}
+
+.order-side::after{
+    content:"🍪";
+    position:absolute;
+    right:-40px;
+    bottom:-50px;
+    font-size:220px;
+    opacity:.07;
+    transform:rotate(-15deg);
+}
+
+.order-side small{
+    color:#e9a36b;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-size:10px;
+    font-weight:800;
+}
+
+.order-side h2{
+    font-family:"Playfair Display",serif;
+    font-size:45px;
+    line-height:1.05;
+    margin:15px 0;
+}
+
+.order-side h2 em{
+    color:#e9a36b;
+}
+
+.order-side>p{
+    color:#cbb8ae;
+    line-height:1.8;
+    font-size:13px;
+}
+
+.order-benefits{
+    margin-top:30px;
+    display:grid;
+    gap:12px;
+}
+
+.order-benefit{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    font-size:11px;
+    color:#e1d2cb;
+}
+
+.order-form{
+    padding:45px;
+    display:grid;
+    gap:16px;
+}
+
+.field{
+    display:grid;
+    gap:7px;
+}
+
+.field label{
+    font-size:11px;
+    font-weight:800;
+}
+
+.field input,
+.field select,
+.field textarea{
+    width:100%;
+    border:1px solid #eaded5;
+    background:#fffaf7;
+    outline:none;
+    padding:13px 15px;
+    border-radius:13px;
+    color:var(--brown);
+    transition:.3s;
+}
+
+.field textarea{
+    min-height:85px;
+    resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+    border-color:var(--caramel);
+    box-shadow:0 0 0 4px rgba(200,120,61,.08);
+}
+
+.two-column{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.location-actions{
+    display:flex;
+    gap:8px;
+}
+
+.location-btn{
+    border:none;
+    background:#f0e4d8;
+    padding:9px 13px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:800;
+    color:var(--brown);
+}
+
+.location-status{
+    color:var(--green);
+    font-size:10px;
+    min-height:14px;
+}
+
+.order-summary{
+    background:#fff6eb;
+    border-radius:16px;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.order-summary small{
+    color:#917c71;
+    font-size:10px;
+}
+
+.order-summary strong{
+    font-size:18px;
+}
+
+.submit{
+    width:100%;
+}
+
+/* =========================
+   INSTAGRAM STYLE
+========================= */
+
+.gallery{
+    max-width:1100px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.gallery-item{
+    height:230px;
+    border-radius:25px;
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.4s;
+}
+
+.gallery-item:hover{
+    transform:scale(.97);
+}
+
+.gallery-item:nth-child(1){
+    background:#e9c18e;
+}
+
+.gallery-item:nth-child(2){
+    background:#d1dbbf;
+}
+
+.gallery-item:nth-child(3){
+    background:#e8b2ae;
+}
+
+.gallery-item:nth-child(4){
+    background:#e0c0a0;
+}
+
+.gallery-cookie{
+    font-size:110px;
+    filter:drop-shadow(0 20px 20px rgba(66,39,27,.16));
+    transition:.5s;
+}
+
+.gallery-item:hover .gallery-cookie{
+    transform:scale(1.15) rotate(8deg);
+}
+
+.gallery-label{
+    position:absolute;
+    bottom:12px;
+    left:12px;
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(8px);
+    padding:7px 11px;
+    border-radius:10px;
+    font-size:9px;
+    font-weight:800;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    background:#302018;
+    color:white;
+    padding:60px 7% 25px;
+}
+
+.footer-main{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-bottom:35px;
+    border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.footer-logo{
+    font-family:"Playfair Display",serif;
+    font-size:30px;
+}
+
+.footer-logo span{
+    color:#e7a26d;
+}
+
+.footer-main p{
+    color:#aa968c;
+    font-size:11px;
+    margin-top:6px;
+}
+
+.socials{
+    display:flex;
+    gap:9px;
+}
+
+.social{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#493025;
+    display:grid;
+    place-items:center;
+    color:white;
+    text-decoration:none;
+    font-size:11px;
+    font-weight:800;
+    transition:.3s;
+}
+
+.social:hover{
+    transform:translateY(-5px);
+    background:#674331;
+}
+
+.copyright{
+    text-align:center;
+    color:#806d63;
+    font-size:10px;
+    padding-top:25px;
+}
+
+/* =========================
+   REVEAL
+========================= */
+
+.reveal{
+    opacity:0;
+    transform:translateY(35px);
+    transition:1s ease;
+}
+
+.reveal.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1000px){
+
+    .hero{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+
+    .hero-description{
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    .hero-actions,
+    .hero-stats{
+        justify-content:center;
+    }
+
+    .hero-visual{
+        height:470px;
+    }
+
+    .product-grid{
+        grid-template-columns:1fr;
+        max-width:450px;
+    }
+
+    .about{
+        grid-template-columns:1fr;
+    }
+
+    .about-art{
+        min-height:430px;
+    }
+
+    .order-box{
+        grid-template-columns:1fr;
+    }
+
+    .gallery{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:700px){
+
+    .navbar{
+        padding:17px 5%;
+    }
+
+    .navbar.scrolled{
+        padding:13px 5%;
+    }
+
+    .menu{
+        display:block;
+    }
+
+    .nav-links{
+        position:absolute;
+        top:70px;
+        left:5%;
+        right:5%;
+        background:white;
+        padding:22px;
+        border-radius:22px;
+        box-shadow:0 20px 50px rgba(66,39,27,.12);
+        flex-direction:column;
+        gap:18px;
+        opacity:0;
+        visibility:hidden;
+        transform:translateY(-15px);
+        transition:.3s;
+    }
+
+    .nav-links.open{
+        opacity:1;
+        visibility:visible;
+        transform:translateY(0);
+    }
+
+    .nav-cta{
+        width:100%;
+        text-align:center;
+    }
+
+    .hero{
+        padding:125px 5% 60px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .hero-actions{
+        flex-direction:column;
+    }
+
+    .hero-stats{
+        gap:18px;
+    }
+
+    .hero-visual{
+        height:400px;
+    }
+
+    .glow{
+        width:300px;
+        height:300px;
+    }
+
+    .big-cookie{
+        width:245px;
+        height:245px;
+    }
+
+    .cookie-label{
+        font-size:9px;
+        padding:10px 13px;
+    }
+
+    .label-one{
+        left:0;
+        top:80px;
+    }
+
+    .label-two{
+        right:0;
+        bottom:80px;
+    }
+
+    section{
+        padding:80px 5%;
+    }
+
+    .features{
+        grid-template-columns:1fr;
+    }
+
+    .steps{
+        grid-template-columns:1fr;
+    }
+
+    .order-side,
+    .order-form{
+        padding:28px 22px;
+    }
+
+    .two-column{
+        grid-template-columns:1fr;
+    }
+
+    .gallery{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .gallery-item{
+        height:170px;
+    }
+
+    .gallery-cookie{
+        font-size:75px;
+    }
+
+    .footer-main{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:25px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+    <div class="loader-inner">
+        <div class="loader-cookie">🍪</div>
+        <p>BAKING SOMETHING GOOD...</p>
+    </div>
+</div>
+
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+
+    <a href="#home" class="logo">
+        crumb<span>ly.</span>
+    </a>
+
+    <button class="menu" id="menu">
+        ☰
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#cookies">Cookies</a></li>
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="#process">How To Order</a></li>
+        <li>
+            <a href="#order" class="nav-cta">Order Now 🍪</a>
+        </li>
+    </ul>
+
+</nav>
+
+
+<!-- HERO -->
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <div class="badge">
+            ✨ Freshly baked • Homemade
+        </div>
+
+        <h1>
+            Cookies made
+            <em>with love.</em>
+        </h1>
+
+        <p class="hero-description">
+            Bukan sekadar cookies. Setiap gigitan dibuat dari
+            bahan pilihan, dipanggang fresh, dan dikemas dengan
+            penuh cinta untuk bikin harimu sedikit lebih manis.
+        </p>
+
+        <div class="hero-actions">
+
+            <a href="#cookies" class="btn btn-dark">
+                Explore Cookies →
+            </a>
+
+            <a href="#order" class="btn btn-outline">
+                📍 Order Sekarang
+            </a>
+
+        </div>
+
+        <div class="hero-stats">
+
+            <div class="stat">
+                <strong>3</strong>
+                <p>Signature Flavours</p>
+            </div>
+
+            <div class="stat">
+                <strong>100%</strong>
+                <p>Homemade</p>
+            </div>
+
+            <div class="stat">
+                <strong>♥</strong>
+                <p>Made With Love</p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-visual">
+
+        <div class="glow"></div>
+
+        <div class="float float-a">✨</div>
+        <div class="float float-b">🤎</div>
+        <div class="float float-c">✦</div>
+        <div class="float float-d">🍪</div>
+
+        <div class="cookie-label label-one">
+            🔥 Freshly Baked
+            <small>Made every batch</small>
+        </div>
+
+        <div class="cookie-label label-two">
+            ⭐ Customer Favourite
+            <small>Try it yourself!</small>
+        </div>
+
+        <div class="cookie-plate"></div>
+
+        <div class="big-cookie">
+            <div class="bite"></div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- MARQUEE -->
+<div class="marquee">
+
+    <div class="marquee-track">
+
+        <div class="marquee-item">
+            <span>🍪</span> HOMEMADE COOKIES
+        </div>
+
+        <div class="marquee-item">
+            <span>♥</span> BAKED WITH LOVE
+        </div>
+
+        <div class="marquee-item">
+            <span>✨</span> FRESH EVERY BATCH
+        </div>
+
+        <div class="marquee-item">
+            <span>🍵</span> ORIGINAL • GREEN TEA • RED VELVET
+        </div>
+
+        <div class="marquee-item">
+            <span>🍪</span> HOMEMADE COOKIES
+        </div>
+
+        <div class="marquee-item">
+            <span>♥</span> BAKED WITH LOVE
+        </div>
+
+        <div class="marquee-item">
+            <span>✨</span> FRESH EVERY BATCH
+        </div>
+
+        <div class="marquee-item">
+            <span>🍵</span> ORIGINAL • GREEN TEA • RED VELVET
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- PRODUCTS -->
+<section class="products" id="cookies">
+
+    <div class="section-title reveal">
+
+        <small>Our Signature</small>
+
+        <h2>
+            Choose your
+            <em>happy bite.</em>
+        </h2>
+
+        <p>
+            Tiga rasa signature kami. Masing-masing punya
+            karakter sendiri, tapi semuanya sama-sama bikin nagih.
+        </p>
+
+    </div>
+
+
+    <div class="product-grid">
+
+        <!-- ORIGINAL -->
+        <div class="product-card reveal">
+
+            <div class="product-photo original-bg">
+
+                <div class="product-cookie original-cookie"></div>
+
+            </div>
+
+            <div class="product-info">
+
+                <div class="product-top">
+
+                    <h3>Original</h3>
+
+                    <div class="rating">
+                        ⭐ 4.9
+                    </div>
+
+                </div>
+
+                <p>
+                    Classic buttery cookies dengan chocolate
+                    chips yang crunchy dan comforting.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        Rp 15K
+                        <span>/ pack</span>
+                    </div>
+
+                    <button
+                        class="select-product"
+                        onclick="selectCookie('Original')">
+                        Choose
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- GREEN TEA -->
+        <div class="product-card reveal">
+
+            <div class="best">
+                ★ BEST SELLER
+            </div>
+
+            <div class="product-photo green-bg">
+
+                <div class="product-cookie green-cookie"></div>
+
+            </div>
+
+            <div class="product-info">
+
+                <div class="product-top">
+
+                    <h3>Green Tea</h3>
+
+                    <div class="rating">
+                        ⭐ 4.9
+                    </div>
+
+                </div>
+
+                <p>
+                    Fresh green tea dengan rasa lembut,
+                    sedikit creamy, dan aroma yang calming.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        Rp 17K
+                        <span>/ pack</span>
+                    </div>
+
+                    <button
+                        class="select-product"
+                        onclick="selectCookie('Green Tea')">
+                        Choose
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RED VELVET -->
+        <div class="product-card reveal">
+
+            <div class="product-photo red-bg">
+
+                <div class="product-cookie red-cookie"></div>
+
+            </div>
+
+            <div class="product-info">
+
+                <div class="product-top">
+
+                    <h3>Red Velvet</h3>
+
+                    <div class="rating">
+                        ⭐ 4.8
+                    </div>
+
+                </div>
+
+                <p>
+                    Manis, lembut, creamy dengan rasa
+                    red velvet yang unik dan cute.
+                </p>
+
+                <div class="product-bottom">
+
+                    <div class="price">
+                        Rp 17K
+                        <span>/ pack</span>
+                    </div>
+
+                    <button
+                        class="select-product"
+                        onclick="selectCookie('Red Velvet')">
+                        Choose
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ABOUT -->
+<section id="about">
+
+    <div class="about">
+
+        <div class="about-art reveal">
+
+            <div class="package"></div>
+
+            <div class="about-cookie a"></div>
+            <div class="about-cookie b"></div>
+            <div class="about-cookie c"></div>
+
+        </div>
+
+
+        <div class="about-text reveal">
+
+            <small>Our Little Story</small>
+
+            <h2>
+                Small batch,
+                <em>big heart.</em>
+            </h2>
+
+            <p>
+                Crumbly lahir dari kecintaan sederhana:
+                membuat cookies yang bukan cuma enak, tapi juga
+                terasa seperti dibuat khusus untuk kamu.
+                Kami membuatnya dalam batch kecil supaya setiap
+                cookies tetap fresh dan kualitasnya terjaga.
+            </p>
+
+
+            <div class="features">
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        🧈
+                    </div>
+
+                    <div>
+                        <strong>Quality Ingredients</strong>
+                        <span>Bahan pilihan</span>
+                    </div>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        🔥
+                    </div>
+
+                    <div>
+                        <strong>Freshly Baked</strong>
+                        <span>Dipanggang fresh</span>
+                    </div>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        ❤️
+                    </div>
+
+                    <div>
+                        <strong>Made With Love</strong>
+                        <span>Homemade sepenuh hati</span>
+                    </div>
+
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        📦
+                    </div>
+
+                    <div>
+                        <strong>Carefully Packed</strong>
+                        <span>Dikemas dengan rapi</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PROCESS -->
+<section class="process" id="process">
+
+    <div class="section-title reveal">
+
+        <small>Easy Peasy</small>
+
+        <h2>
+            Order cookies
+            <em>in 3 steps.</em>
+        </h2>
+
+        <p>
+            Nggak perlu ribet. Pilih rasa, masukkan lokasi,
+            lalu checkout melalui WhatsApp.
+        </p>
+
+    </div>
+
+
+    <div class="steps">
+
+        <div class="step reveal">
+
+            <div class="step-circle">
+                🍪
+            </div>
+
+            <h3>Pick Your Flavour</h3>
+
+            <p>
+                Pilih Original, Green Tea,
+                atau Red Velvet.
+            </p>
+
+        </div>
+
+
+        <div class="step reveal">
+
+            <div class="step-circle">
+                📍
+            </div>
+
+            <h3>Add Your Location</h3>
+
+            <p>
+                Masukkan alamat atau gunakan
+                lokasi GPS kamu.
+            </p>
+
+        </div>
+
+
+        <div class="step reveal">
+
+            <div class="step-circle">
+                💬
+            </div>
+
+            <h3>Send Your Order</h3>
+
+            <p>
+                Pesanan otomatis dibuat dan
+                dikirim ke WhatsApp.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- GALLERY -->
+<section>
+
+    <div class="section-title reveal">
+
+        <small>Sweet Moments</small>
+
+        <h2>
+            A little piece of
+            <em>happiness.</em>
+        </h2>
+
+        <p>
+            Cookies kecil, mood jadi lebih baik. 🍪
+        </p>
+
+    </div>
+
+
+    <div class="gallery">
+
+        <div class="gallery-item reveal">
+
+            <div class="gallery-cookie">
+                🍪
+            </div>
+
+            <div class="gallery-label">
+                ORIGINAL
+            </div>
+
+        </div>
+
+
+        <div class="gallery-item reveal">
+
+            <div class="gallery-cookie">
+                🍵
+            </div>
+
+            <div class="gallery-label">
+                GREEN TEA
+            </div>
+
+        </div>
+
+
+        <div class="gallery-item reveal">
+
+            <div class="gallery-cookie">
+                ❤️
+            </div>
+
+            <div class="gallery-label">
+                RED VELVET
+            </div>
+
+        </div>
+
+
+        <div class="gallery-item reveal">
+
+            <div class="gallery-cookie">
+                ✨
+            </div>
+
+            <div class="gallery-label">
+                MADE WITH LOVE
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ORDER -->
+<section class="order" id="order">
+
+    <div class="section-title reveal">
+
+        <small>Place Your Order</small>
+
+        <h2>
+            Ready for some
+            <em>cookies?</em>
+        </h2>
+
+        <p>
+            Isi pesanan kamu di bawah. Total harga akan
+            dihitung otomatis.
+        </p>
+
+    </div>
+
+
+    <div class="order-box reveal">
+
+        <div class="order-side">
+
+            <small>Crumbly Order</small>
+
+            <h2>
+                Your next
+                <em>happy bite.</em>
+            </h2>
+
+            <p>
+                Isi data pesanan dengan lengkap supaya kami
+                bisa menyiapkan cookies dan mengantarkannya
+                ke lokasi kamu.
+            </p>
+
+
+            <div class="order-benefits">
+
+                <div class="order-benefit">
+                    ✓ Freshly baked
+                </div>
+
+                <div class="order-benefit">
+                    ✓ Homemade
+                </div>
+
+                <div class="order-benefit">
+                    ✓ Location included
+                </div>
+
+                <div class="order-benefit">
+                    ✓ WhatsApp confirmation
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <form class="order-form" id="orderForm">
+
+            <div class="field">
+
+                <label>
+                    Nama
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Masukkan nama kamu"
+                    required>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Pilih Cookies
+                </label>
+
+                <select id="cookie" required>
+
+                    <option value="">
+                        — Pilih rasa —
+                    </option>
+
+                    <option value="Original">
+                        🍪 Original — Rp15.000
+                    </option>
+
+                    <option value="Green Tea">
+                        🍵 Green Tea — Rp17.000
+                    </option>
+
+                    <option value="Red Velvet">
+                        ❤️ Red Velvet — Rp17.000
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="two-column">
+
+                <div class="field">
+
+                    <label>
+                        Jumlah Pack
+                    </label>
+
+                    <input
+                        type="number"
+                        id="quantity"
+                        min="1"
+                        value="1"
+                        required>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Nomor WhatsApp
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="08xxxxxxxxxx"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    📍 Lokasi / Alamat
+                </label>
+
+                <textarea
+                    id="location"
+                    placeholder="Contoh: Jl. Raya Rogojampi No. 10, Banyuwangi"
+                    required></textarea>
+
+                <div class="location-actions">
+
+                    <button
+                        type="button"
+                        class="location-btn"
+                        onclick="getLocation()">
+                        📍 Gunakan Lokasi Saya
+                    </button>
+
+                </div>
+
+                <div
+                    class="location-status"
+                    id="locationStatus">
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Catatan
+                </label>
+
+                <textarea
+                    id="note"
+                    placeholder="Contoh: Tolong dikirim sore hari..."></textarea>
+
+            </div>
+
+
+            <div class="order-summary">
+
+                <div>
+                    <small>Total Pesanan</small>
+                    <br>
+                    <span id="summaryText">
+                        Pilih cookies terlebih dahulu
+                    </span>
+                </div>
+
+                <strong id="total">
+                    Rp0
+                </strong>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn btn-dark submit">
+
+                💬 Kirim Pesanan via WhatsApp
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+
+    <div class="footer-main">
+
+        <div>
+
+            <div class="footer-logo">
+                crumb<span>ly.</span>
+            </div>
+
+            <p>
+                Homemade cookies for your happy moments. 🍪
+            </p>
+
+        </div>
+
+
+        <div class="socials">
+
+            <a href="#" class="social">
+                IG
+            </a>
+
+            <a href="#" class="social">
+                WA
+            </a>
+
+            <a href="#" class="social">
+                TT
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+        © 2026 Crumbly Homemade Cookies • Made with 🍪 & ❤️
+    </div>
+
+</footer>
+
+
+<script>
+
+/* =========================
+   LOADER
+========================= */
+
+window.addEventListener("load",function(){
+
+    setTimeout(function(){
+
+        document
+            .getElementById("loader")
+            .classList.add("hide");
+
+    },800);
+
+});
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+const navbar =
+    document.getElementById("navbar");
+
+window.addEventListener("scroll",function(){
+
+    if(window.scrollY > 40){
+        navbar.classList.add("scrolled");
+    }else{
+        navbar.classList.remove("scrolled");
+    }
+
+});
+
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+const menu =
+    document.getElementById("menu");
+
+const navLinks =
+    document.getElementById("navLinks");
+
+menu.addEventListener("click",function(){
+
+    navLinks.classList.toggle("open");
+
+    menu.textContent =
+        navLinks.classList.contains("open")
+        ? "✕"
+        : "☰";
+
+});
+
+document
+    .querySelectorAll(".nav-links a")
+    .forEach(function(link){
+
+        link.addEventListener("click",function(){
+
+            navLinks.classList.remove("open");
+
+            menu.textContent="☰";
+
+        });
+
+    });
+
+
+/* =========================
+   SCROLL REVEAL
+========================= */
+
+const reveals =
+    document.querySelectorAll(".reveal");
+
+const observer =
+    new IntersectionObserver(
+        function(entries){
+
+            entries.forEach(function(entry){
+
+                if(entry.isIntersecting){
+
+                    entry.target.classList.add("show");
+
+                }
+
+            });
+
+        },
+        {
+            threshold:.12
+        }
+    );
+
+reveals.forEach(function(element){
+
+    observer.observe(element);
+
+});
+
+
+/* =========================
+   SELECT COOKIE
+========================= */
+
+function selectCookie(flavour){
+
+    const select =
+        document.getElementById("cookie");
+
+    select.value=flavour;
+
+    updateTotal();
+
+    document
+        .getElementById("order")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+
+/* =========================
+   PRICE CALCULATOR
+========================= */
+
+const cookieSelect =
+    document.getElementById("cookie");
+
+const quantityInput =
+    document.getElementById("quantity");
+
+const totalElement =
+    document.getElementById("total");
+
+const summaryText =
+    document.getElementById("summaryText");
+
+
+function updateTotal(){
+
+    const flavour =
+        cookieSelect.value;
+
+    const quantity =
+        parseInt(quantityInput.value) || 0;
+
+    let price=0;
+
+    if(flavour==="Original"){
+        price=15000;
+    }
+
+    if(flavour==="Green Tea"){
+        price=17000;
+    }
+
+    if(flavour==="Red Velvet"){
+        price=17000;
+    }
+
+    const total =
+        price * quantity;
+
+
+    totalElement.textContent =
+        new Intl.NumberFormat(
+            "id-ID",
+            {
+                style:"currency",
+                currency:"IDR",
+                maximumFractionDigits:0
+            }
+        ).format(total);
+
+
+    if(flavour){
+
+        summaryText.textContent =
+            `${flavour} × ${quantity} pack`;
+
+    }else{
+
+        summaryText.textContent =
+            "Pilih cookies terlebih dahulu";
+
+    }
+
+}
+
+
+cookieSelect.addEventListener(
+    "change",
+    updateTotal
+);
+
+quantityInput.addEventListener(
+    "input",
+    updateTotal
+);
+
+
+/* =========================
+   LOCATION
+========================= */
+
+function getLocation(){
+
+    const status =
+        document.getElementById(
+            "locationStatus"
+        );
+
+    const locationInput =
+        document.getElementById(
+            "location"
+        );
+
+
+    if(!navigator.geolocation){
+
+        status.textContent =
+            "❌ Browser tidak mendukung GPS.";
+
+        return;
+
+    }
+
+
+    status.textContent =
+        "📍 Mengambil lokasi...";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            const lat =
+                position.coords.latitude;
+
+            const lng =
+                position.coords.longitude;
+
+
+            locationInput.value =
+                `Lokasi GPS: ${lat}, ${lng}`;
+
+
+            status.textContent =
+                "✓ Lokasi berhasil ditemukan!";
+
+        },
+
+        function(){
+
+            status.textContent =
+                "⚠️ Lokasi tidak tersedia. Silakan isi alamat manual.";
+
+        },
+
+        {
+            enableHighAccuracy:true,
+            timeout:10000
+        }
+
+    );
+
+}
+
+
+/* =========================
+   WHATSAPP
+========================= */
+
+document
+    .getElementById("orderForm")
+    .addEventListener(
+        "submit",
+        function(event){
+
+            event.preventDefault();
+
+
+            /*
+                ==========================
+                GANTI NOMOR WHATSAPP
+                ==========================
+
+                Contoh nomor:
+                081234567890
+
+                Ditulis menjadi:
+                6281234567890
+            */
+
+            const whatsappNumber =
+                "6281234567890";
+
+
+            const name =
+                document
+                    .getElementById("name")
+                    .value;
+
+
+            const cookie =
+                document
+                    .getElementById("cookie")
+                    .value;
+
+
+            const quantity =
+                document
+                    .getElementById("quantity")
+                    .value;
+
+
+            const phone =
+                document
+                    .getElementById("phone")
+                    .value;
+
+
+            const location =
+                document
+                    .getElementById("location")
+                    .value;
+
+
+            const note =
+                document
+                    .getElementById("note")
+                    .value;
+
+
+            let price=0;
+
+
+            if(cookie==="Original"){
+                price=15000;
+            }
+
+            if(cookie==="Green Tea"){
+                price=17000;
+            }
+
+            if(cookie==="Red Velvet"){
+                price=17000;
+            }
+
+
+            const total =
+                price * parseInt(quantity);
+
+
+            const formattedTotal =
+                new Intl.NumberFormat(
+                    "id-ID",
+                    {
+                        style:"currency",
+                        currency:"IDR",
+                        maximumFractionDigits:0
+                    }
+                ).format(total);
+
+
+            const message =
+
+`🍪 *ORDER CRUMBLY*
+
+Halo Crumbly! Saya ingin memesan cookies.
+
+━━━━━━━━━━━━━━
+
+👤 *Nama*
+${name}
+
+🍪 *Cookies*
+${cookie}
+
+📦 *Jumlah*
+${quantity} pack
+
+💰 *Total*
+${formattedTotal}
+
+📱 *WhatsApp*
+${phone}
+
+━━━━━━━━━━━━━━
+
+📍 *LOKASI PENGANTARAN*
+${location}
+
+📝 *CATATAN*
+${note || "-"}
+
+━━━━━━━━━━━━━━
+
+Mohon konfirmasi pesanan saya ya. Terima kasih! 🍪❤️`;
+
+
+            const url =
+                `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+
+            window.open(
+                url,
+                "_blank"
+            );
+
+        }
+    );
+
+
+/* =========================
+   CURSOR PARALLAX COOKIE
+========================= */
+
+const bigCookie =
+    document.querySelector(".big-cookie");
+
+document.addEventListener(
+    "mousemove",
+    function(event){
+
+        if(window.innerWidth < 900){
+            return;
+        }
+
+        const x =
+            (window.innerWidth / 2 - event.clientX) / 35;
+
+        const y =
+            (window.innerHeight / 2 - event.clientY) / 35;
+
+
+        bigCookie.style.transform =
+            `translate(${x}px,${y}px) rotate(${x * -.2}deg)`;
+
+    }
+);
+
+</script>
+
+</body>
+</html>
